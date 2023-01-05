@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://Breeze-Wu.github.io/sitemap.xml

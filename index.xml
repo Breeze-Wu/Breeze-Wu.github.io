@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dgwu - A super concise theme for Hugo</title>
+    <link>https://Breeze-Wu.github.io/</link>
+    <description>Recent content on dgwu - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 03 Jan 2023 17:36:26 +0800</lastBuildDate>
+    
+        <atom:link href="https://Breeze-Wu.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About</title>
+      <link>https://Breeze-Wu.github.io/about/</link>
+      <pubDate>Sun, 20 Aug 2017 21:38:52 +0800</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/about/</guid>
+      
+        <description>&lt;p&gt;Hugo is a static site engine written in Go.&lt;/p&gt;
+&lt;p&gt;It makes use of a variety of open source projects including:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/spf13/cobra&#34;&gt;Cobra&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/spf13/viper&#34;&gt;Viper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/spf13/jWalterWeatherman&#34;&gt;J Walter Weatherman&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/spf13/cast&#34;&gt;Cast&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Learn more and contribute on &lt;a href=&#34;https://github.com/gohugoio&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>First</title>
+      <link>https://Breeze-Wu.github.io/post/1.-welcome-to-joplin/</link>
+      <pubDate>Tue, 03 Jan 2023 17:36:26 +0800</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/1.-welcome-to-joplin/</guid>
+      
+        <description>&lt;h1 id=&#34;welcome-to-joplin&#34;&gt;Welcome to Joplin!&lt;/h1&gt;
+&lt;p&gt;Joplin is a free, open source note taking and to-do application, which helps you write and organise your notes, and synchronise them between your devices. The notes are searchable, can be copied, tagged and modified either from the application directly or from your own text editor. The notes are in &lt;a href=&#34;https://joplinapp.org/help/#markdown&#34;&gt;Markdown format&lt;/a&gt;. Joplin is available as a &lt;strong&gt;desktop&lt;/strong&gt;, &lt;strong&gt;mobile&lt;/strong&gt; and &lt;strong&gt;terminal&lt;/strong&gt; application.&lt;/p&gt;
+&lt;p&gt;The notes in this notebook give an overview of what Joplin can do and how to use it. In general, the three applications share roughly the same functionalities; any differences will be clearly indicated.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../_resources/AllClients.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;joplin-is-divided-into-three-parts&#34;&gt;Joplin is divided into three parts&lt;/h2&gt;
+&lt;p&gt;Joplin has three main columns:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Sidebar&lt;/strong&gt; contains the list of your notebooks and tags, as well as the synchronisation status.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Note List&lt;/strong&gt; contains the current list of notes - either the notes in the currently selected notebook, the notes in the currently selected tag, or search results.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Note Editor&lt;/strong&gt; is the place where you write your notes. There is a &lt;strong&gt;Rich Text editor&lt;/strong&gt; and a &lt;strong&gt;Markdown editor&lt;/strong&gt; - click on the &lt;strong&gt;Toggle editor&lt;/strong&gt; button in the top right hand corner to switch between both! You may also use an &lt;a href=&#34;https://joplinapp.org/help/#external-text-editor&#34;&gt;external editor&lt;/a&gt; to edit notes. For example you can use Typora as an external editor and it will display the note as well as any embedded images.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;writing-notes-in-markdown&#34;&gt;Writing notes in Markdown&lt;/h2&gt;
+&lt;p&gt;Markdown is a lightweight markup language with plain text formatting syntax. Joplin supports a &lt;a href=&#34;https://joplinapp.org/markdown/&#34;&gt;Github-flavoured Markdown syntax&lt;/a&gt; with a few variations and additions.&lt;/p&gt;
+&lt;p&gt;In general, while Markdown is a markup language, it is meant to be human readable, even without being rendered. This is a simple example (you can see how it looks in the viewer panel):&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;heading&#34;&gt;Heading&lt;/h1&gt;
+&lt;h2 id=&#34;sub-heading&#34;&gt;Sub-heading&lt;/h2&gt;
+&lt;p&gt;Paragraphs are separated by a blank line. Text attributes &lt;em&gt;italic&lt;/em&gt;, &lt;strong&gt;bold&lt;/strong&gt; and &lt;code&gt;monospace&lt;/code&gt; are supported. You can create bullet lists:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;apples&lt;/li&gt;
+&lt;li&gt;oranges&lt;/li&gt;
+&lt;li&gt;pears&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Or numbered lists:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;wash&lt;/li&gt;
+&lt;li&gt;rinse&lt;/li&gt;
+&lt;li&gt;repeat&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This is a &lt;a href=&#34;https://joplinapp.org&#34;&gt;link&lt;/a&gt; and, finally, below is a horizontal rule:&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;A lot more is possible including adding code samples, math formulae or checkbox lists - see the &lt;a href=&#34;https://joplinapp.org/help/#markdown&#34;&gt;Markdown documentation&lt;/a&gt; for more information.&lt;/p&gt;
+&lt;h2 id=&#34;organising-your-notes&#34;&gt;Organising your notes&lt;/h2&gt;
+&lt;h3 id=&#34;with-notebooks&#34;&gt;With notebooks&lt;/h3&gt;
+&lt;p&gt;Joplin notes are organised into a tree of notebooks and sub-notebooks.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;On &lt;strong&gt;desktop&lt;/strong&gt;, you can create a notebook by clicking on New Notebook, then you can drag and drop them into other notebooks to organise them as you wish.&lt;/li&gt;
+&lt;li&gt;On &lt;strong&gt;mobile&lt;/strong&gt;, press the &amp;ldquo;+&amp;rdquo; icon and select &amp;ldquo;New notebook&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;On &lt;strong&gt;terminal&lt;/strong&gt;, press &lt;code&gt;:mn&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;../_resources/SubNotebooks.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;with-tags&#34;&gt;With tags&lt;/h3&gt;
+&lt;p&gt;The second way to organise your notes is using tags:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;On &lt;strong&gt;desktop&lt;/strong&gt;, right-click on any note in the Note List, and select &amp;ldquo;Edit tags&amp;rdquo;. You can then add the tags, separating them by commas.&lt;/li&gt;
+&lt;li&gt;On &lt;strong&gt;mobile&lt;/strong&gt;, open the note and press the &amp;ldquo;⋮&amp;rdquo; button and select &amp;ldquo;Tags&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;On &lt;strong&gt;terminal&lt;/strong&gt;, type &lt;code&gt;:help tag&lt;/code&gt; for the available commands.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>
