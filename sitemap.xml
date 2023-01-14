@@ -3,40 +3,48 @@
   
   <url>
     <loc>https://Breeze-Wu.github.io/about/</loc>
-    <lastmod>2017-08-28T21:41:52+08:00</lastmod>
+    <lastmod>2023-01-03T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://Breeze-Wu.github.io/</loc>
-    <lastmod>2023-01-03T17:36:26+08:00</lastmod>
+    <lastmod>2023-01-13T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://Breeze-Wu.github.io/post/1.-welcome-to-joplin/</loc>
-    <lastmod>2023-01-03T17:36:26+08:00</lastmod>
+    <loc>https://Breeze-Wu.github.io/tags/linux/</loc>
+    <lastmod>2023-01-13T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://Breeze-Wu.github.io/post/linux_init/</loc>
+    <lastmod>2023-01-13T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://Breeze-Wu.github.io/post/</loc>
-    <lastmod>2023-01-03T17:36:26+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://Breeze-Wu.github.io/categories/</loc>
+    <lastmod>2023-01-13T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://Breeze-Wu.github.io/tags/</loc>
+    <lastmod>2023-01-13T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://Breeze-Wu.github.io/categories/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
