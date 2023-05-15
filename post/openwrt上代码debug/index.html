@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>openwrt上debug方法总结 - dgwu - A super concise theme for Hugo</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="dgwu" />
+  <meta name="description" content="摘要 本文旨在梳理总结openwrt系统上用户侧的调试方法，其中包括代码静态检查、内存泄露、进程爆栈(段错误)、死锁等问题的调试方法。水平有限" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.109.0" />
+
+
+<link rel="canonical" href="https://Breeze-Wu.github.io/post/openwrt%E4%B8%8A%E4%BB%A3%E7%A0%81debug/" />
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.de22abc00de44766eebd1054fd9e0b254b071f89d5019044f893c484a9249a8d.css" integrity="sha256-3iKrwA3kR2buvRBU/Z4LJUsHH4nVAZBE&#43;JPEhKkkmo0=" media="screen" crossorigin="anonymous">
+
+
+
+
+
+
+
+<meta property="og:title" content="openwrt上debug方法总结" />
+<meta property="og:description" content="摘要 本文旨在梳理总结openwrt系统上用户侧的调试方法，其中包括代码静态检查、内存泄露、进程爆栈(段错误)、死锁等问题的调试方法。水平有限" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Breeze-Wu.github.io/post/openwrt%E4%B8%8A%E4%BB%A3%E7%A0%81debug/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-02-03T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-02-03T00:00:00+00:00" />
+<meta itemprop="name" content="openwrt上debug方法总结">
+<meta itemprop="description" content="摘要 本文旨在梳理总结openwrt系统上用户侧的调试方法，其中包括代码静态检查、内存泄露、进程爆栈(段错误)、死锁等问题的调试方法。水平有限"><meta itemprop="datePublished" content="2023-02-03T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-02-03T00:00:00+00:00" />
+<meta itemprop="wordCount" content="4326">
+<meta itemprop="keywords" content="openwrt," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="openwrt上debug方法总结"/>
+<meta name="twitter:description" content="摘要 本文旨在梳理总结openwrt系统上用户侧的调试方法，其中包括代码静态检查、内存泄露、进程爆栈(段错误)、死锁等问题的调试方法。水平有限"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">dgwu</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/">Home</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/post/">Archives</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/tags/">Tags</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/about/">About</a>
+          
+        
+      </li>
+    
+
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      dgwu
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/">Home</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/about/">About</a>
+          
+
+        
+
+      </li>
+    
+
+    
+    
+
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">openwrt上debug方法总结</h1>
+      
+
+      <div class="post-meta">
+  <div class="post-meta-author">
+    by
+      <a href="/about">
+        <span class="post-meta-author-name">
+          dgwu
+        </span>
+      </a>
+    
+  </div>
+
+  <div class="post-meta-time">
+    <time datetime="2023-02-03">
+      2023-02-03
+    </time>
+  </div>
+
+  
+
+
+  <div class="post-meta__right">
+    
+
+    
+
+
+    
+    
+
+
+    
+    
+  </div>
+</div>
+
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Table of Contents</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#11-什么是代码静态检查">1.1 什么是代码静态检查</a></li>
+    <li><a href="#12-如何使用代码静态检查">1.2 如何使用代码静态检查</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#21-加log">2.1 加log</a>
+      <ul>
+        <li><a href="#211-log的格式">2.1.1 log的格式</a></li>
+        <li><a href="#212-log的位置">2.1.2 log的位置</a></li>
+      </ul>
+    </li>
+    <li><a href="#22-gdb">2.2 gdb</a>
+      <ul>
+        <li><a href="#221-配置gdb">2.2.1 配置gdb</a></li>
+        <li><a href="#222-使用gdb">2.2.2 使用gdb</a></li>
+      </ul>
+    </li>
+    <li><a href="#23-valgrind">2.3 valgrind</a>
+      <ul>
+        <li><a href="#231配置valgrind">2.3.1配置valgrind</a></li>
+        <li><a href="#232-使用valgrind">2.3.2 使用valgrind</a></li>
+        <li><a href="#233-性能图形">2.3.3 性能图形</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#31-什么是段错误">3.1 什么是段错误？</a></li>
+    <li><a href="#32-调试段错误">3.2 调试段错误</a>
+      <ul>
+        <li><a href="#321-cppcheck调试">3.2.1 cppcheck调试</a></li>
+        <li><a href="#322-gdb调试">3.2.2 gdb调试</a></li>
+        <li><a href="#323-valgrind">3.2.3 valgrind</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#41-ubuntu系统">4.1 ubuntu系统</a>
+      <ul>
+        <li><a href="#411-问题复现">4.1.1 问题复现</a></li>
+        <li><a href="#412-问题点定位">4.1.2 问题点定位</a></li>
+      </ul>
+    </li>
+    <li><a href="#42-openwrt系统">4.2 openwrt系统</a>
+      <ul>
+        <li><a href="#421-objdump">4.2.1 objdump</a></li>
+        <li><a href="#423-addr2line">4.2.3 addr2line</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+
+
+    
+    <div class="post-content">
+      <h1 id="摘要">摘要</h1>
+<p>本文旨在梳理总结openwrt系统上用户侧的调试方法，其中包括代码静态检查、内存泄露、进程爆栈(段错误)、死锁等问题的调试方法。水平有限，文中错误处欢迎指正交流。</p>
+<h1 id="1代码静态检查">1、代码静态检查</h1>
+<h2 id="11-什么是代码静态检查">1.1 什么是代码静态检查</h2>
+<p>故名思意，代码静态检查是在源码未编译成二进制可执行文件之前做的一项错误排查，提前发现并暴露部分问题，如语法、命名、初始化、赋值、数组越界等错误问题，而不是等编译器编译快完成才提示某个位置存在错误。</p>
+<p>大型嵌入式系统开发过程中，整个项目全编一次需要花费一个钟以上，代码调试时等编译完成需要浪费大量时间，引入代码静态检查能提前发现代码中存在问题，提前优化修改，减少因代码错误导致编译不通过的次数，达到提高开发效率的目的。</p>
+<h2 id="12-如何使用代码静态检查">1.2 如何使用代码静态检查</h2>
+<p>openwrt系统中使用的大多是c/c++代码，本文只介绍2款支持该语言的代码检查工具，其他语言可以自行到网上寻找。</p>
+<p>VSCode是一款兼容多种语言的代码编辑器，我可以用它编辑代码、检查语法、格式、变量命名等错误问题，并且它还提供了自动补全、代码高亮等需要小功能与多种可用插件。非常适合上手的代码编译器，具体下载使用教程自行百度，他不是我们今天的重点。</p>
+<p>Cppcheck 是用于 C/C++代码的静态分析工具。它提供独特的代码分析来检测错误，并专注于检测<strong>未定义的行为和危险的编码结构</strong>。目标是只有很少的误报。Cppcheck 旨在能够分析 C/C++ 代码，即使它具有非标准语法（在嵌入式项目中很常见）</p>
+<p>以上是官方对Cppcheck的描述，在作者自己的使用中，Cppcheck能够发现内存泄露、数组越界、指针使用错误等问题。以下是该工具的安装使用方法</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-2">2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-3">3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-4">4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-5">5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-6">6</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>sudo apt-get install cppcheck  //ubuntu下安装cppcheck
+</span></span><span style="display:flex;"><span>cppcheck --version              //查看版本
+</span></span><span style="display:flex;"><span>cppcheck file.c				    //检测单个文件
+</span></span><span style="display:flex;"><span>cppcheck path 2&gt;err.txt			//检测目录下的所有c/c++文件
+</span></span><span style="display:flex;"><span>cppcheck --enable=all file.c    //启用warning、performance 、information 、style、unusedFunction等不同等级检查
+</span></span><span style="display:flex;"><span>cppcheck -j 4 path				//多线程检测
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通常我喜欢使用下面这条命令检查指定文件目录并将检查结果存到err.txt中</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>cppcheck --enable=all path 2&gt;err.txt	//常用
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="2动态debug">2、动态debug</h1>
+<p>静态代码检查只是代码调试的第一步，解决了编译，使用未定义行为等问题，但这不能保证代码就没有问题了，可能是问题隐藏的更深，比如线程死锁、阻塞、代码跑飞了、断错误等等问题。</p>
+<p>这类问题通常在程序运行起来后出现，我称之为代码逻辑问题。解决这类问题常用的调试方法包括加注释、gdb、火焰图，具体使用方法继续往下看。</p>
+<h2 id="21-加log">2.1 加log</h2>
+<p>好的log让调试开发事半功倍，学会如何添加log是所有开发必修的一门课，以下是作者根据三年嵌入开发经验，总结的log规范。</p>
+<h3 id="211-log的格式">2.1.1 log的格式</h3>
+<p>log中带上日志等级、时间戳、进程名、函数名、行号，方便判断故障时间、故障位置，一秒定位问题。如：</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-2">2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-3">3</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>openlog(name, 0, LOG_DAEMON);
+</span></span><span style="display:flex;"><span>system(LOG_ERR,&#34;[%s]%d:commit error!\n&#34;,__FUNCTION__,__LINE__);
+</span></span><span style="display:flex;"><span>closelog();
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="212-log的位置">2.1.2 log的位置</h3>
+<ul>
+<li>逻辑分支处加log</li>
+<li>重要函数的开始处</li>
+<li>关键或重要变量修改处</li>
+</ul>
+<h2 id="22-gdb">2.2 gdb</h2>
+<h3 id="221-配置gdb">2.2.1 配置gdb</h3>
+<p>openwrt系统支持本地gdb和远程gdb，可通过menuconfig修改config配置，具体操作如下：</p>
+<p><img src="/image/openwrt_debug/debug_2.2.1.png" alt="图片"></p>
+<p>也可直接修改.config文件,修改或新增如下字段</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-2">2</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>// qsdk/.config
+</span></span><span style="display:flex;"><span>CONFIG_GDB=y
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编译并烧录openwrt镜像，系统起来后通过如下方式查看gdb工具是否编译成功</p>
+<p><img src="/image/openwrt_debug/debug_2.2.1x.png" alt="图片"></p>
+<h3 id="222-使用gdb">2.2.2 使用gdb</h3>
+<h4 id="使用gdb前的准备">使用gdb前的准备</h4>
+<p>在介绍gdb使用前，我们需要知道gdb借助ptrace函数接管了操作系统与调试程序的交互，以此达到控制调试进程的目的。在程序编译时，需在gcc后面加上-g选项，使调试程序生成更多的调试信息。还有一点非常重要，不要strip、不要strip、不要strip，重要的事情说三遍。可通过如下方式判断可执行文件是否被strip。</p>
+<p><img src="/image/openwrt_debug/debug_2.2.1xx.png" alt="图片"></p>
+<h4 id="gdb常用命令">gdb常用命令</h4>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-16">16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-17"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-17">17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-18"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-18">18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-19"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-19">19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-20"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-20">20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-21"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-21">21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-22">22</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>(gdb) demo				        //进入调试程序
+</span></span><span style="display:flex;"><span>(gdb) attach pid                //进入运行中程序调试
+</span></span><span style="display:flex;"><span>(gdb) set args + 参数		    //函数传参
+</span></span><span style="display:flex;"><span>(gdb) start					    //开始调试 调到main()
+</span></span><span style="display:flex;"><span>(gdb) list(l)					//显示10行   l 1,20/查看1-20行代码  l mian/查看main()函数附近代码 
+</span></span><span style="display:flex;"><span>(gdb) break(b) n	|func		//在第n行或函数处设置普通断点
+</span></span><span style="display:flex;"><span>(gdb) watch 表达式 | 变量名	    //设置观察点 变量或表达式改变时停止执行
+</span></span><span style="display:flex;"><span>(gdb)delete(d) breaknum | breakpoints	  //根据断点号删除断点  breakpoints 删除所有断点
+</span></span><span style="display:flex;"><span>(gdb)info b					//显示所有断点  //info thread  查看所有线程
+</span></span><span style="display:flex;"><span>(gdb)run(r)					//运行程序 在断点处停止
+</span></span><span style="display:flex;"><span>(gdb) continue(c)			    //继续执行程序，在断点处停止
+</span></span><span style="display:flex;"><span>(gdb) next(n)					//执行下一行，不进入函数
+</span></span><span style="display:flex;"><span>(gdb) step(s)					//执行下一行，进入函数
+</span></span><span style="display:flex;"><span>(gdb) print 变量名			    //打印变量信息
+</span></span><span style="display:flex;"><span>(gdb) display 变量名		    //打印变量 执行一次后 遇到断点或程序停止执行时都会打印变量值
+</span></span><span style="display:flex;"><span>(gdb) until					    //运行到退出程序
+</span></span><span style="display:flex;"><span>(gdb) finish					//运行到函数返回
+</span></span><span style="display:flex;"><span>(gdb) quit(q)					//退出gdb
+</span></span><span style="display:flex;"><span>(gdb) condition bnum expression		//为断点(bnum)设置触发条件
+</span></span><span style="display:flex;"><span>(gdb) catch event 			    //捕获事件
+</span></span><span style="display:flex;"><span>(gdb) info threads              //查看线程 
+</span></span><span style="display:flex;"><span>(gdb) bt                        //显示堆栈信息
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果是在嵌入式设备内部调试程序，需要将调试程序的源码移动到嵌入设备内部，或放在U盘中，然后将U盘挂载到嵌入式设备上。进入gdb并在gdb内部指定源码位置。</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>dir /mnt/sda1/...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="23-valgrind">2.3 valgrind</h2>
+<p>通常为了更直观了解程序内部的调用情况、各个模块的运行时间、内存使用情况、CPU使用情况等待信息，我们需要更多其他专业的工具。下面介绍valgrind工具的使用方式，用于将程序内部的请用情况，运行时间等信息用图形的方式展现出来。</p>
+<h3 id="231配置valgrind">2.3.1配置valgrind</h3>
+<p>通过menuconfig修改config配置，具体操作如下：</p>
+<p><img src="/image/openwrt_debug/debug_2.3.1.png" alt="图片"></p>
+<p>也可直接修改.config文件,修改或新增如下字段</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-2">2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-3">3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-4">4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-5">5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-6">6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-7">7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-8">8</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>// qsdk/.config
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind=y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-cachegrind=y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-callgrind=y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-drd=y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-helgrind=y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-massif=y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-vgdb=y
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编译并烧录openwrt镜像，系统起来后通过如下方式查看valgrind工具是否编译成功</p>
+<p><img src="/image/openwrt_debug/debug_2.3.1x.png" alt="图片"></p>
+<h3 id="232-使用valgrind">2.3.2 使用valgrind</h3>
+<p>常用命令</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-2">2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-3">3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-4">4</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>valgrind --leak-check=full 程序名   //分析内存泄露问题
+</span></span><span style="display:flex;"><span>valgrind --tool=callgrind 程序名    //程序调用可视化
+</span></span><span style="display:flex;"><span>valgrind --tool=cachegrind 程序名   //缓存命中分析
+</span></span><span style="display:flex;"><span>valgrind --tool=helgrind 程序名     //多线程资源竞争检测
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="233-性能图形">2.3.3 性能图形</h3>
+<h4 id="工具安装">工具安装</h4>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-2">2</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>sudo apt-get install python3 graphviz
+</span></span><span style="display:flex;"><span>pip3 install gprof2dot
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="调用命令生成图形">调用命令生成图形</h4>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-2">2</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>valgrind --tool=callgrind --callgrind-out-file=callgrind.out ./demo
+</span></span><span style="display:flex;"><span>gprof2dot -f callgrind -n 0.5 -e 0.5 -s callgrind.out | dot -Tpng -o perf.png
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="性能图">性能图</h4>
+<p><img src="/image/openwrt_debug/debug_2.3.3.png" alt="图片"></p>
+<p>从上图中可以看到函数间的调用关系、调用次数、运行时间等信息。如果未出现函数名，请检查程序执行文件是否被strip。</p>
+<h1 id="3段错误">3、段错误</h1>
+<p>段错误我们大家可能都有遇到过，为了进一步熟悉测试上面介绍的三种工具，作者用断错误的程序带大家体验三种工具的使用方法。</p>
+<h2 id="31-什么是段错误">3.1 什么是段错误？</h2>
+<p>segmentation fault(存储器断错误)，是一种程序错误。它会出现在当程序企图访问CPU无法定址的存储器区块时。当错误发生时，硬件会通知操作系统产生了存储器访问权限冲突的状况。操作系统通常会产生核心转储文件（core dump）以方便程序员进行除错。触发断错误常见的方式包括使用<strong>访问空指针</strong>、<strong>访问系统保护的地址、访问只读地址、栈溢出</strong>等。</p>
+<h2 id="32-调试段错误">3.2 调试段错误</h2>
+<p>让我们一起在ubuntu系统中编译并执行下面这段程序，看看会发生什么？(备注：作者使用18.04.1-Ubuntu操作系统)</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-16">16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-17"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-17">17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-18"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-18">18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-19"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-19">19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-20"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-20">20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-21"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-21">21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-22">22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-23"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-23">23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-24"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-24">24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-25"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-25">25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-26"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-26">26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-27"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-27">27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-28"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-28">28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-29"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-29">29</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>#include &#34;stdio.h&#34;
+</span></span><span style="display:flex;"><span>#include &#34;string.h&#34;
+</span></span><span style="display:flex;"><span>#include &#34;stdlib.h&#34;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void test_one()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    char *pt = NULL;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    printf(&#34;==one address is NULL==\r\n&#34;);
+</span></span><span style="display:flex;"><span>    if (pt[0])
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(&#34;....\n&#34;);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void test_three()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    char *pt = &#34;test segment fault!&#34;;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    printf(&#34;==three read only address==\r\n&#34;);
+</span></span><span style="display:flex;"><span>    pt[0] = &#39;T&#39;;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main(void)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    printf(&#34;========test segmentation fault=======\r\n&#34;);
+</span></span><span style="display:flex;"><span>    test_one();
+</span></span><span style="display:flex;"><span>    test_three();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="321-cppcheck调试">3.2.1 cppcheck调试</h3>
+<p>ubuntu系统中下载安装cppcheck后，执行如下命令</p>
+<p><img src="/image/openwrt_debug/debug_3.2.1.png" alt="图片"></p>
+<p>工具检查出来的错误都被保存在err.txt文件中。查看文件可以看到一个error级别的错误问题，在源文件第10行。这里我们可以发现，cppcheck只发现了源代码中的一个错误，另一个没有检测出来。这与cppcheck工具的检测范围有关，<strong>专注检测语言未定义的行为和危险的编码结构</strong>，所以我们需要使用多种工具调试分析不同的问题。</p>
+<h3 id="322-gdb调试">3.2.2 gdb调试</h3>
+<p>假设我们根据cppcheck扫描后的提示解决了第10行的问题，继续在命令行终端执行如下命令</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-11-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-11-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-11-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-11-2">2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-11-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-11-3">3</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>gcc -g -o demo segmfaultTest.c  //-g选项，生成待调试信息的可执行文件
+</span></span><span style="display:flex;"><span>ulimit -a               //查看core文件大小 若大小为0 无法生成core文件
+</span></span><span style="display:flex;"><span>ulimit -c unlimited	    //修改core文件大小
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重新运行可执行文件后生成了core文件。</p>
+<p><img src="/image/openwrt_debug/debug_3.2.2.png" alt="图片"></p>
+<p>执行gdb ./demo core命令后解析出具体dump点的位置信息。</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-11">11</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>neo@neo:~/work/c_program$ gdb ./demo core
+</span></span><span style="display:flex;"><span>GNU gdb (Ubuntu 7.7.1-0ubuntu5~14.04.3) 7.7.1
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>Core was generated by `./demo&#39;.
+</span></span><span style="display:flex;"><span>Program terminated with signal SIGSEGV, Segmentation fault.
+</span></span><span style="display:flex;"><span>#0  0x0000000000400578 in test_three () at segmfaultTest.c:21
+</span></span><span style="display:flex;"><span>21          pt[0] = &#39;T&#39;;
+</span></span><span style="display:flex;"><span>(gdb) bt
+</span></span><span style="display:flex;"><span>#0  0x0000000000400578 in test_three () at segmfaultTest.c:21
+</span></span><span style="display:flex;"><span>#1  0x000000000040059f in main () at segmfaultTest.c:28
+</span></span><span style="display:flex;"><span>(gdb) 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="323-valgrind">3.2.3 valgrind</h3>
+<p>在ubuntu系统中执行下面的命令，生成性能图</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-13-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-13-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-13-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-13-2">2</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>valgrind --tool=callgrind --callgrind-out-file=callgrind.out ./demo
+</span></span><span style="display:flex;"><span>gprof2dot -f callgrind -n 0.5 -e 0.5 -s callgrind.out | dot -Tpng -o perf.png
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/image/openwrt_debug/debug_3.2.3.png" alt="图片"></p>
+<h1 id="4-实例展示">4 实例展示</h1>
+<h2 id="41-ubuntu系统">4.1 ubuntu系统</h2>
+<h3 id="411-问题复现">4.1.1 问题复现</h3>
+<p>让我们一起在linux中编译并执行下面这段程序，看看会发生什么？</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-15">15</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>int main(void)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    char *pt=NULL;
+</span></span><span style="display:flex;"><span>    char arr[10] = {0};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    printf(&#34;========test segmentation fault=======\n&#34;);
+</span></span><span style="display:flex;"><span>    printf(&#34;==one *pt is NULL==\n&#34;);
+</span></span><span style="display:flex;"><span>    if(pt[0]){
+</span></span><span style="display:flex;"><span>            printf(&#34;....\n&#34;);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    printf(&#34;==two array out of bounds==\n&#34;);
+</span></span><span style="display:flex;"><span>    strcat(arr,&#34;two array out of bounds&#34;);
+</span></span><span style="display:flex;"><span>    printf(&#34;arr:%s\n&#34;, arr);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编译运行后系统打印如下段错误信息并且程序被强制退出运行</p>
+<p><img src="/image/openwrt_debug/debug_4.1.1.png" alt="图片"></p>
+<p>上面样例程序非常简单，我们能很快发现操作了空指针导致程序dump，但是在我们的项目中，一个进程有成千上万行代码，一点点加log，去理解代码的执行流程，这种方式的效率肯定是不高的。下面介绍以较高效率定位到错误源码的方法</p>
+<h3 id="412-问题点定位">4.1.2 问题点定位</h3>
+<p>命令行终端执行如下命令</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-15-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-15-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-15-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-15-2">2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-15-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-15-3">3</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>gcc -g -o demo test.c   //重新编译源码 增加-g选项，生成待调试信息的可执行文件
+</span></span><span style="display:flex;"><span>ulimit -a               //查看core文件大小 若大小为0 无法生成core文件
+</span></span><span style="display:flex;"><span>ulimit -c unlimited	    //修改core文件大小
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重新运行可执行文件后生成了core文件</p>
+<p><img src="/image/openwrt_debug/debug_4.1.2.png" alt="图片"></p>
+<p>执行gdb ./demo core命令后解析出具体dump点的位置信息。</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-16-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-16-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-16-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-16-2">2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-16-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-16-3">3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-16-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-16-4">4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-16-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-16-5">5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-16-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-16-6">6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-16-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-16-7">7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-16-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-16-8">8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-16-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-16-9">9</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>neo@neo:~/work/c_program$ gdb ./demo core
+</span></span><span style="display:flex;"><span>GNU gdb (Ubuntu 7.7.1-0ubuntu5~14.04.3) 7.7.1
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>Core was generated by `./demo&#39;.
+</span></span><span style="display:flex;"><span>Program terminated with signal SIGSEGV, Segmentation fault.
+</span></span><span style="display:flex;"><span>#0  0x00000000004006b4 in main () at test.c:70
+</span></span><span style="display:flex;"><span>70          if(pt[0]){
+</span></span><span style="display:flex;"><span>(gdb) bt
+</span></span><span style="display:flex;"><span>#0  0x00000000004006b4 in main () at test.c:70
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="42-openwrt系统">4.2 openwrt系统</h2>
+<p>将上述源码在openwrt中交叉编译后，运行可执行文件</p>
+<p><img src="/image/openwrt_debug/debug_4.2.png" alt="图片"></p>
+<p>可见与ubuntu系统表现略有不通，openwrt系统给出了dump时的堆栈信息，没有生成core文件。有两种反汇编方式定位dump点源码</p>
+<h3 id="421-objdump">4.2.1 objdump</h3>
+<p>objdump命令是用查看目标文件或者可执行的目标文件的gcc工具。</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-16">16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-17"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-17">17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-18"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-18">18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-19"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-19">19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-20"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-20">20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-21"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-21">21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-22">22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-23"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-23">23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-24"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-24">24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-25"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-25">25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-26"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-26">26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-27"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-27">27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-28"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-28">28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-29"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-29">29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-30"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-30">30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-31"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-31">31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-32"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-32">32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-33"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-33">33</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>:~/$ ./qsdk/staging_dir/toolchain-aarch64_cortex-a53_gcc-5.2.0_musl-1.1.16/bin/aarch64-openwrt-linux-objdump -d demo1   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>demo1:     file format elf64-littleaarch64
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>0000000000400734 &lt;main&gt;:
+</span></span><span style="display:flex;"><span>main():
+</span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:40
+</span></span><span style="display:flex;"><span>  400734:       a9bd7bfd        stp     x29, x30, [sp,#-48]!
+</span></span><span style="display:flex;"><span>  400738:       910003fd        mov     x29, sp
+</span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:65
+</span></span><span style="display:flex;"><span>  40073c:       f90017bf        str     xzr, [x29,#40]
+</span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:66
+</span></span><span style="display:flex;"><span>  400740:       f9000fbf        str     xzr, [x29,#24]
+</span></span><span style="display:flex;"><span>  400744:       790043bf        strh    wzr, [x29,#32]
+</span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:68
+</span></span><span style="display:flex;"><span>  400748:       90000000        adrp    x0, 400000 &lt;_init-0x4e0&gt;
+</span></span><span style="display:flex;"><span>  40074c:       9120c000        add     x0, x0, #0x830
+</span></span><span style="display:flex;"><span>  400750:       97ffff78        bl      400530 &lt;puts@plt&gt;
+</span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:69
+</span></span><span style="display:flex;"><span>  400754:       90000000        adrp    x0, 400000 &lt;_init-0x4e0&gt;
+</span></span><span style="display:flex;"><span>  400758:       91216000        add     x0, x0, #0x858
+</span></span><span style="display:flex;"><span>  40075c:       97ffff75        bl      400530 &lt;puts@plt&gt;
+</span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:70
+</span></span><span style="display:flex;"><span>  400760:       f94017a0        ldr     x0, [x29,#40]
+</span></span><span style="display:flex;"><span>  400764:       39400000        ldrb    w0, [x0]
+</span></span><span style="display:flex;"><span>  400768:       6b1f001f        cmp     w0, wzr
+</span></span><span style="display:flex;"><span>  40076c:       54000080        b.eq    40077c &lt;main+0x48&gt;
+</span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:71
+</span></span><span style="display:flex;"><span>  400770:       90000000        adrp    x0, 400000 &lt;_init-0x4e0&gt;
+</span></span><span style="display:flex;"><span>  400774:       9121c000        add     x0, x0, #0x870
+</span></span><span style="display:flex;"><span>  400778:       97ffff6e        bl      400530 &lt;puts@plt&gt;
+</span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:74
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用objdump反汇编解析可执行文件，根据dump点出的堆栈信息，主要是PC、LR寄存器的值，对照反汇编解析到了信息，找到源码dump点位置。这里PC=0x400764,LR=0x400760，对应上述代码23行位置，指向test.c源文件的70行。</p>
+<h3 id="423-addr2line">4.2.3 addr2line</h3>
+<p>addr2line是一个可以将指令的地址和可执行文件转换为文件名、函数名和源代码行数的gcc工具。</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-18-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-18-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-18-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-18-2">2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-18-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-18-3">3</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>:~/$ aarch64-openwrt-linux-addr2line 0x400760 -e demo1 -f
+</span></span><span style="display:flex;"><span>main
+</span></span><span style="display:flex;"><span>/test.c:70
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="5总结">5、总结</h1>
+<p>我们今天聊了程序debug的几种方法，cppcheck——代码静态检测，专注于检查语言未定义的行为和编码结果错误问题，GDB——动态调试工具，c语言代码调试的神器，valgrind——调试程序性能，生成性能分析图。介绍总结了工具安装与使用方式，最后用一个常见的问题——段错误，分别使用三种工具调试定位错误。</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">dgwu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+      2023-02-03
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+
+    
+    
+
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://Breeze-Wu.github.io/tags/openwrt/">openwrt</a>
+            
+        </div>
+
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/linux_init/">
+            <span class="next-text nav-default">linux系统init启动梳理</span>
+            <span class="prev-text nav-mobile">Next</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="icon-links">
+  
+  
+    <a href="mailto:your@email.com" rel="me noopener" class="iconfont"
+      title="email" >
+      <svg class="icon" viewBox="0 0 1451 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+    </a>
+  
+    <a href="http://localhost:1317" rel="me noopener" class="iconfont"
+      title="github"  target="_blank"
+      >
+      <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M512 12.672c-282.88 0-512 229.248-512 512 0 226.261333 146.688 418.133333 350.08 485.76 25.6 4.821333 34.986667-11.008 34.986667-24.618667 0-12.16-0.426667-44.373333-0.64-87.04-142.421333 30.890667-172.458667-68.693333-172.458667-68.693333C188.672 770.986667 155.008 755.2 155.008 755.2c-46.378667-31.744 3.584-31.104 3.584-31.104 51.413333 3.584 78.421333 52.736 78.421333 52.736 45.653333 78.293333 119.850667 55.68 149.12 42.581333 4.608-33.109333 17.792-55.68 32.426667-68.48-113.706667-12.8-233.216-56.832-233.216-253.013333 0-55.893333 19.84-101.546667 52.693333-137.386667-5.76-12.928-23.04-64.981333 4.48-135.509333 0 0 42.88-13.738667 140.8 52.48 40.96-11.392 84.48-17.024 128-17.28 43.52 0.256 87.04 5.888 128 17.28 97.28-66.218667 140.16-52.48 140.16-52.48 27.52 70.528 10.24 122.581333 5.12 135.509333 32.64 35.84 52.48 81.493333 52.48 137.386667 0 196.693333-119.68 240-233.6 252.586667 17.92 15.36 34.56 46.762667 34.56 94.72 0 68.522667-0.64 123.562667-0.64 140.202666 0 13.44 8.96 29.44 35.2 24.32C877.44 942.592 1024 750.592 1024 524.672c0-282.752-229.248-512-512-512"></path>
+</svg>
+
+    </a>
+  
+    <a href="http://localhost:1317" rel="me noopener" class="iconfont"
+      title="twitch"  target="_blank"
+      >
+      <svg
+  class="icon" style="" viewBox="0 0 36 36" version="1.1" width="36" height="36" id="svg8">
+  <path
+      style=""
+      d="M 10,32.5 C 10,30.309524 9.5666667,30 6.5,30 H 3 V 18.196167 6.3923336 L 6.2976072,3.1961668 9.5952145,0 H 21.297607 33 v 9.2813035 9.2813035 l -5.778997,5.718696 C 23.230948,28.229724 20.653654,30 18.895317,30 17.471816,30 15.312792,31.102597 14,32.5 12.708255,33.875 11.279813,35 10.825686,35 10.371559,35 10,33.875 10,32.5 Z M 23.12736,22 c 1.432033,0 3.645397,-1.197147 5.185549,-2.804719 C 30.682196,16.722278 31,15.598708 31,9.6952811 V 3 H 20.5 10 v 9.5 9.5 h 3 c 2.413503,0 3,0.425076 3,2.174314 v 2.174314 l 2.314451,-2.174314 C 19.587399,22.978441 21.753208,22 23.12736,22 Z M 17.666667,14.333333 C 17.3,13.966667 17,12.166667 17,10.333333 17,8.037037 17.466667,7 18.5,7 c 1.083333,0 1.5,1.1111111 1.5,4 0,3.753437 -0.7878,4.878866 -2.333333,3.333333 z m 6.722867,-0.760607 C 23.554137,11.395717 24.34722,7.7069709 25.75,7.2449946 26.613128,6.9607414 27,8.097114 27,10.916667 c 0,3.979702 -1.51214,5.518252 -2.610466,2.656059 z"
+      id="rect824"/>
+</svg>
+
+    </a>
+
+
+<a href="https://Breeze-Wu.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+    class="iconfont" title="rss" target="_blank">
+    <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="30" height="30">
+  <path d="M819.157333 1024C819.157333 574.592 449.408 204.8 0 204.8V0c561.706667 0 1024 462.293333 1024 1024h-204.842667zM140.416 743.04a140.8 140.8 0 0 1 140.501333 140.586667A140.928 140.928 0 0 1 140.074667 1024C62.72 1024 0 961.109333 0 883.626667s62.933333-140.544 140.416-140.586667zM678.784 1024h-199.04c0-263.210667-216.533333-479.786667-479.744-479.786667V345.173333c372.352 0 678.784 306.517333 678.784 678.826667z"></path>
+</svg>
+
+  </a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+      2017 -
+    2023
+    <span class="heart">
+      
+      <i class="iconfont">
+        <svg class="icon" viewBox="0 0 1025 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="14" height="14">
+  <path d="M1000.1 247.9c-15.5-37.3-37.6-70.6-65.7-98.9-54.4-54.8-125.8-85-201-85-85.7 0-166 39-221.4 107.4C456.6 103 376.3 64 290.6 64c-75.1 0-146.5 30.4-201.1 85.6-28.2 28.5-50.4 61.9-65.8 99.3-16 38.8-24 79.9-23.6 122.2 0.7 91.7 40.1 177.2 108.1 234.8 3.1 2.6 6 5.1 8.9 7.8 14.9 13.4 58 52.8 112.6 102.7 93.5 85.5 209.9 191.9 257.5 234.2 7 6.1 15.8 9.5 24.9 9.5 9.2 0 18.1-3.4 24.9-9.5 34.5-30.7 105.8-95.9 181.4-165 74.2-67.8 150.9-138 195.8-178.2 69.5-57.9 109.6-144.4 109.9-237.3 0.1-42.5-8-83.6-24-122.2z"
+   fill="#8a8a8a"></path>
+</svg>
+
+      </i>
+    </span><span class="author">
+        dgwu
+        
+      </span></span>
+
+  
+  
+
+  
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="/js/main.fe83e11b4fbc9193d67e2c9db78bad21f8dc59fca0cacd8c1c3bb071bb16a852.js" integrity="sha256-/oPhG0&#43;8kZPWfiydt4utIfjcWfygys2MHDuwcbsWqFI=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -6,7 +6,16 @@
     <description>Recent content in Posts on dgwu - A super concise theme for Hugo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 13 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://Breeze-Wu.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://Breeze-Wu.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>openwrt上debug方法总结</title>
+      <link>https://Breeze-Wu.github.io/post/openwrt%E4%B8%8A%E4%BB%A3%E7%A0%81debug/</link>
+      <pubDate>Fri, 03 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/openwrt%E4%B8%8A%E4%BB%A3%E7%A0%81debug/</guid>
+      <description>摘要 本文旨在梳理总结openwrt系统上用户侧的调试方法，其中包括代码静态检查、内存泄露、进程爆栈(段错误)、死锁等问题的调试方法。水平有限</description>
+    </item>
+    
     <item>
       <title>linux系统init启动梳理</title>
       <link>https://Breeze-Wu.github.io/post/linux_init/</link>
