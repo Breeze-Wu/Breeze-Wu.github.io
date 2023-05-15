@@ -399,12 +399,12 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-6">6</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>sudo apt-get install cppcheck  //ubuntu下安装cppcheck
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo apt-get install cppcheck  //ubuntu下安装cppcheck
 </span></span><span style="display:flex;"><span>cppcheck --version              //查看版本
 </span></span><span style="display:flex;"><span>cppcheck file.c				    //检测单个文件
 </span></span><span style="display:flex;"><span>cppcheck path 2&gt;err.txt			//检测目录下的所有c/c++文件
-</span></span><span style="display:flex;"><span>cppcheck --enable=all file.c    //启用warning、performance 、information 、style、unusedFunction等不同等级检查
-</span></span><span style="display:flex;"><span>cppcheck -j 4 path				//多线程检测
+</span></span><span style="display:flex;"><span>cppcheck --enable<span style="color:#ff7b72;font-weight:bold">=</span>all file.c    //启用warning、performance 、information 、style、unusedFunction等不同等级检查
+</span></span><span style="display:flex;"><span>cppcheck -j <span style="color:#a5d6ff">4</span> path				//多线程检测
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>通常我喜欢使用下面这条命令检查指定文件目录并将检查结果存到err.txt中</p>
@@ -413,7 +413,7 @@
 <pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-1">1</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>cppcheck --enable=all path 2&gt;err.txt	//常用
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cppcheck --enable<span style="color:#ff7b72;font-weight:bold">=</span>all path 2&gt;err.txt	//常用
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h1 id="2动态debug">2、动态debug</h1>
@@ -430,9 +430,9 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-3">3</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>openlog(name, 0, LOG_DAEMON);
-</span></span><span style="display:flex;"><span>system(LOG_ERR,&#34;[%s]%d:commit error!\n&#34;,__FUNCTION__,__LINE__);
-</span></span><span style="display:flex;"><span>closelog();
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>openlog<span style="color:#ff7b72;font-weight:bold">(</span>name, 0, LOG_DAEMON<span style="color:#ff7b72;font-weight:bold">)</span>;
+</span></span><span style="display:flex;"><span>system<span style="color:#ff7b72;font-weight:bold">(</span>LOG_ERR,<span style="color:#a5d6ff">&#34;[%s]%d:commit error!\n&#34;</span>,__FUNCTION__,__LINE__<span style="color:#ff7b72;font-weight:bold">)</span>;
+</span></span><span style="display:flex;"><span>closelog<span style="color:#ff7b72;font-weight:bold">()</span>;
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="212-log的位置">2.1.2 log的位置</h3>
@@ -452,8 +452,8 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-2">2</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>// qsdk/.config
-</span></span><span style="display:flex;"><span>CONFIG_GDB=y
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>// qsdk/.config
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">CONFIG_GDB</span><span style="color:#ff7b72;font-weight:bold">=</span>y
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>编译并烧录openwrt镜像，系统起来后通过如下方式查看gdb工具是否编译成功</p>
@@ -489,28 +489,28 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-22">22</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>(gdb) demo				        //进入调试程序
-</span></span><span style="display:flex;"><span>(gdb) attach pid                //进入运行中程序调试
-</span></span><span style="display:flex;"><span>(gdb) set args + 参数		    //函数传参
-</span></span><span style="display:flex;"><span>(gdb) start					    //开始调试 调到main()
-</span></span><span style="display:flex;"><span>(gdb) list(l)					//显示10行   l 1,20/查看1-20行代码  l mian/查看main()函数附近代码 
-</span></span><span style="display:flex;"><span>(gdb) break(b) n	|func		//在第n行或函数处设置普通断点
-</span></span><span style="display:flex;"><span>(gdb) watch 表达式 | 变量名	    //设置观察点 变量或表达式改变时停止执行
-</span></span><span style="display:flex;"><span>(gdb)delete(d) breaknum | breakpoints	  //根据断点号删除断点  breakpoints 删除所有断点
-</span></span><span style="display:flex;"><span>(gdb)info b					//显示所有断点  //info thread  查看所有线程
-</span></span><span style="display:flex;"><span>(gdb)run(r)					//运行程序 在断点处停止
-</span></span><span style="display:flex;"><span>(gdb) continue(c)			    //继续执行程序，在断点处停止
-</span></span><span style="display:flex;"><span>(gdb) next(n)					//执行下一行，不进入函数
-</span></span><span style="display:flex;"><span>(gdb) step(s)					//执行下一行，进入函数
-</span></span><span style="display:flex;"><span>(gdb) print 变量名			    //打印变量信息
-</span></span><span style="display:flex;"><span>(gdb) display 变量名		    //打印变量 执行一次后 遇到断点或程序停止执行时都会打印变量值
-</span></span><span style="display:flex;"><span>(gdb) until					    //运行到退出程序
-</span></span><span style="display:flex;"><span>(gdb) finish					//运行到函数返回
-</span></span><span style="display:flex;"><span>(gdb) quit(q)					//退出gdb
-</span></span><span style="display:flex;"><span>(gdb) condition bnum expression		//为断点(bnum)设置触发条件
-</span></span><span style="display:flex;"><span>(gdb) catch event 			    //捕获事件
-</span></span><span style="display:flex;"><span>(gdb) info threads              //查看线程 
-</span></span><span style="display:flex;"><span>(gdb) bt                        //显示堆栈信息
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> demo				        //进入调试程序
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> attach pid                //进入运行中程序调试
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> set args + 参数		    //函数传参
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> start					    //开始调试 调到main<span style="color:#ff7b72;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> list<span style="color:#ff7b72;font-weight:bold">(</span>l<span style="color:#ff7b72;font-weight:bold">)</span>					//显示10行   l 1,20/查看1-20行代码  l mian/查看main<span style="color:#ff7b72;font-weight:bold">()</span>函数附近代码 
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> break<span style="color:#ff7b72;font-weight:bold">(</span>b<span style="color:#ff7b72;font-weight:bold">)</span> n	|func		//在第n行或函数处设置普通断点
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> watch 表达式 | 变量名	    //设置观察点 变量或表达式改变时停止执行
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span>delete<span style="color:#ff7b72;font-weight:bold">(</span>d<span style="color:#ff7b72;font-weight:bold">)</span> breaknum | breakpoints	  //根据断点号删除断点  breakpoints 删除所有断点
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span>info b					//显示所有断点  //info thread  查看所有线程
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span>run<span style="color:#ff7b72;font-weight:bold">(</span>r<span style="color:#ff7b72;font-weight:bold">)</span>					//运行程序 在断点处停止
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> <span style="color:#ff7b72">continue</span><span style="color:#ff7b72;font-weight:bold">(</span>c<span style="color:#ff7b72;font-weight:bold">)</span>			    //继续执行程序，在断点处停止
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> next<span style="color:#ff7b72;font-weight:bold">(</span>n<span style="color:#ff7b72;font-weight:bold">)</span>					//执行下一行，不进入函数
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> step<span style="color:#ff7b72;font-weight:bold">(</span>s<span style="color:#ff7b72;font-weight:bold">)</span>					//执行下一行，进入函数
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> print 变量名			    //打印变量信息
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> display 变量名		    //打印变量 执行一次后 遇到断点或程序停止执行时都会打印变量值
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> <span style="color:#ff7b72">until</span>					    //运行到退出程序
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> finish					//运行到函数返回
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> quit<span style="color:#ff7b72;font-weight:bold">(</span>q<span style="color:#ff7b72;font-weight:bold">)</span>					//退出gdb
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> condition bnum expression		//为断点<span style="color:#ff7b72;font-weight:bold">(</span>bnum<span style="color:#ff7b72;font-weight:bold">)</span>设置触发条件
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> catch event 			    //捕获事件
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> info threads              //查看线程 
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> bt                        //显示堆栈信息
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果是在嵌入式设备内部调试程序，需要将调试程序的源码移动到嵌入设备内部，或放在U盘中，然后将U盘挂载到嵌入式设备上。进入gdb并在gdb内部指定源码位置。</p>
@@ -519,7 +519,7 @@
 <pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-1">1</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>dir /mnt/sda1/...
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>dir /mnt/sda1/...
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="23-valgrind">2.3 valgrind</h2>
@@ -540,14 +540,14 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-8">8</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>// qsdk/.config
-</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind=y
-</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-cachegrind=y
-</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-callgrind=y
-</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-drd=y
-</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-helgrind=y
-</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-massif=y
-</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-vgdb=y
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>// qsdk/.config
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">CONFIG_PACKAGE_valgrind</span><span style="color:#ff7b72;font-weight:bold">=</span>y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-cachegrind<span style="color:#ff7b72;font-weight:bold">=</span>y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-callgrind<span style="color:#ff7b72;font-weight:bold">=</span>y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-drd<span style="color:#ff7b72;font-weight:bold">=</span>y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-helgrind<span style="color:#ff7b72;font-weight:bold">=</span>y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-massif<span style="color:#ff7b72;font-weight:bold">=</span>y
+</span></span><span style="display:flex;"><span>CONFIG_PACKAGE_valgrind-vgdb<span style="color:#ff7b72;font-weight:bold">=</span>y
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>编译并烧录openwrt镜像，系统起来后通过如下方式查看valgrind工具是否编译成功</p>
@@ -562,10 +562,10 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-4">4</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>valgrind --leak-check=full 程序名   //分析内存泄露问题
-</span></span><span style="display:flex;"><span>valgrind --tool=callgrind 程序名    //程序调用可视化
-</span></span><span style="display:flex;"><span>valgrind --tool=cachegrind 程序名   //缓存命中分析
-</span></span><span style="display:flex;"><span>valgrind --tool=helgrind 程序名     //多线程资源竞争检测
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>valgrind --leak-check<span style="color:#ff7b72;font-weight:bold">=</span>full 程序名   //分析内存泄露问题
+</span></span><span style="display:flex;"><span>valgrind --tool<span style="color:#ff7b72;font-weight:bold">=</span>callgrind 程序名    //程序调用可视化
+</span></span><span style="display:flex;"><span>valgrind --tool<span style="color:#ff7b72;font-weight:bold">=</span>cachegrind 程序名   //缓存命中分析
+</span></span><span style="display:flex;"><span>valgrind --tool<span style="color:#ff7b72;font-weight:bold">=</span>helgrind 程序名     //多线程资源竞争检测
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="233-性能图形">2.3.3 性能图形</h3>
@@ -576,7 +576,7 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-2">2</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>sudo apt-get install python3 graphviz
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo apt-get install python3 graphviz
 </span></span><span style="display:flex;"><span>pip3 install gprof2dot
 </span></span></code></pre></td></tr></table>
 </div>
@@ -587,7 +587,7 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-2">2</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>valgrind --tool=callgrind --callgrind-out-file=callgrind.out ./demo
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>valgrind --tool<span style="color:#ff7b72;font-weight:bold">=</span>callgrind --callgrind-out-file<span style="color:#ff7b72;font-weight:bold">=</span>callgrind.out ./demo
 </span></span><span style="display:flex;"><span>gprof2dot -f callgrind -n 0.5 -e 0.5 -s callgrind.out | dot -Tpng -o perf.png
 </span></span></code></pre></td></tr></table>
 </div>
@@ -633,34 +633,34 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-10-29"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-10-29">29</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>#include &#34;stdio.h&#34;
-</span></span><span style="display:flex;"><span>#include &#34;string.h&#34;
-</span></span><span style="display:flex;"><span>#include &#34;stdlib.h&#34;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>void test_one()
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#include</span><span style="color:#8b949e;font-weight:bold;font-style:italic"> &#34;stdio.h&#34;</span><span style="color:#8b949e;font-weight:bold;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#include</span><span style="color:#8b949e;font-weight:bold;font-style:italic"> &#34;string.h&#34;</span><span style="color:#8b949e;font-weight:bold;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#include</span><span style="color:#8b949e;font-weight:bold;font-style:italic"> &#34;stdlib.h&#34;</span><span style="color:#8b949e;font-weight:bold;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">void</span><span style="color:#f85149"> </span><span style="color:#d2a8ff;font-weight:bold">test_one</span>()
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    char *pt = NULL;
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#ff7b72">char</span><span style="color:#f85149"> </span><span style="color:#ff7b72;font-weight:bold">*</span>pt<span style="color:#f85149"> </span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#f85149"> </span>NULL;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    printf(&#34;==one address is NULL==\r\n&#34;);
-</span></span><span style="display:flex;"><span>    if (pt[0])
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        printf(&#34;....\n&#34;);
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#d2a8ff;font-weight:bold">printf</span>(<span style="color:#a5d6ff">&#34;==one address is NULL==</span><span style="color:#79c0ff">\r\n</span><span style="color:#a5d6ff">&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#ff7b72">if</span><span style="color:#f85149"> </span>(pt[<span style="color:#a5d6ff">0</span>])
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span>{
+</span></span><span style="display:flex;"><span><span style="color:#f85149">        </span><span style="color:#d2a8ff;font-weight:bold">printf</span>(<span style="color:#a5d6ff">&#34;....</span><span style="color:#79c0ff">\n</span><span style="color:#a5d6ff">&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span>}
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>void test_three()
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">void</span><span style="color:#f85149"> </span><span style="color:#d2a8ff;font-weight:bold">test_three</span>()
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    char *pt = &#34;test segment fault!&#34;;
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#ff7b72">char</span><span style="color:#f85149"> </span><span style="color:#ff7b72;font-weight:bold">*</span>pt<span style="color:#f85149"> </span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#f85149"> </span><span style="color:#a5d6ff">&#34;test segment fault!&#34;</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    printf(&#34;==three read only address==\r\n&#34;);
-</span></span><span style="display:flex;"><span>    pt[0] = &#39;T&#39;;
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#d2a8ff;font-weight:bold">printf</span>(<span style="color:#a5d6ff">&#34;==three read only address==</span><span style="color:#79c0ff">\r\n</span><span style="color:#a5d6ff">&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span>pt[<span style="color:#a5d6ff">0</span>]<span style="color:#f85149"> </span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#f85149"> </span><span style="color:#a5d6ff">&#39;T&#39;</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>int main(void)
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">int</span><span style="color:#f85149"> </span><span style="color:#d2a8ff;font-weight:bold">main</span>(<span style="color:#ff7b72">void</span>)
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    printf(&#34;========test segmentation fault=======\r\n&#34;);
-</span></span><span style="display:flex;"><span>    test_one();
-</span></span><span style="display:flex;"><span>    test_three();
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#d2a8ff;font-weight:bold">printf</span>(<span style="color:#a5d6ff">&#34;========test segmentation fault=======</span><span style="color:#79c0ff">\r\n</span><span style="color:#a5d6ff">&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#d2a8ff;font-weight:bold">test_one</span>();
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#d2a8ff;font-weight:bold">test_three</span>();
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></td></tr></table>
 </div>
@@ -677,7 +677,7 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-11-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-11-3">3</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>gcc -g -o demo segmfaultTest.c  //-g选项，生成待调试信息的可执行文件
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gcc -g -o demo segmfaultTest.c  //-g选项，生成待调试信息的可执行文件
 </span></span><span style="display:flex;"><span>ulimit -a               //查看core文件大小 若大小为0 无法生成core文件
 </span></span><span style="display:flex;"><span>ulimit -c unlimited	    //修改core文件大小
 </span></span></code></pre></td></tr></table>
@@ -700,17 +700,17 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-12-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-12-11">11</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>neo@neo:~/work/c_program$ gdb ./demo core
-</span></span><span style="display:flex;"><span>GNU gdb (Ubuntu 7.7.1-0ubuntu5~14.04.3) 7.7.1
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>neo@neo:~/work/c_program$ gdb ./demo core
+</span></span><span style="display:flex;"><span>GNU gdb <span style="color:#ff7b72;font-weight:bold">(</span>Ubuntu 7.7.1-0ubuntu5~14.04.3<span style="color:#ff7b72;font-weight:bold">)</span> 7.7.1
 </span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>Core was generated by `./demo&#39;.
-</span></span><span style="display:flex;"><span>Program terminated with signal SIGSEGV, Segmentation fault.
-</span></span><span style="display:flex;"><span>#0  0x0000000000400578 in test_three () at segmfaultTest.c:21
-</span></span><span style="display:flex;"><span>21          pt[0] = &#39;T&#39;;
-</span></span><span style="display:flex;"><span>(gdb) bt
-</span></span><span style="display:flex;"><span>#0  0x0000000000400578 in test_three () at segmfaultTest.c:21
-</span></span><span style="display:flex;"><span>#1  0x000000000040059f in main () at segmfaultTest.c:28
-</span></span><span style="display:flex;"><span>(gdb) 
+</span></span><span style="display:flex;"><span>Core was generated by <span style="color:#a5d6ff">`</span>./demo<span style="color:#a5d6ff">&#39;.
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">Program terminated with signal SIGSEGV, Segmentation fault.
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">#0  0x0000000000400578 in test_three () at segmfaultTest.c:21
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">21          pt[0] = &#39;</span>T<span style="color:#f85149">&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> bt
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#0  0x0000000000400578 in test_three () at segmfaultTest.c:21</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#1  0x000000000040059f in main () at segmfaultTest.c:28</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> 
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="323-valgrind">3.2.3 valgrind</h3>
@@ -721,7 +721,7 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-13-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-13-2">2</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>valgrind --tool=callgrind --callgrind-out-file=callgrind.out ./demo
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>valgrind --tool<span style="color:#ff7b72;font-weight:bold">=</span>callgrind --callgrind-out-file<span style="color:#ff7b72;font-weight:bold">=</span>callgrind.out ./demo
 </span></span><span style="display:flex;"><span>gprof2dot -f callgrind -n 0.5 -e 0.5 -s callgrind.out | dot -Tpng -o perf.png
 </span></span></code></pre></td></tr></table>
 </div>
@@ -749,20 +749,20 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-14-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-14-15">15</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>int main(void)
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#ff7b72">int</span> <span style="color:#d2a8ff;font-weight:bold">main</span>(<span style="color:#ff7b72">void</span>)
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    char *pt=NULL;
-</span></span><span style="display:flex;"><span>    char arr[10] = {0};
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#ff7b72">char</span><span style="color:#f85149"> </span><span style="color:#ff7b72;font-weight:bold">*</span>pt<span style="color:#ff7b72;font-weight:bold">=</span>NULL;
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#ff7b72">char</span><span style="color:#f85149"> </span>arr[<span style="color:#a5d6ff">10</span>]<span style="color:#f85149"> </span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#f85149"> </span>{<span style="color:#a5d6ff">0</span>};
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    printf(&#34;========test segmentation fault=======\n&#34;);
-</span></span><span style="display:flex;"><span>    printf(&#34;==one *pt is NULL==\n&#34;);
-</span></span><span style="display:flex;"><span>    if(pt[0]){
-</span></span><span style="display:flex;"><span>            printf(&#34;....\n&#34;);
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#d2a8ff;font-weight:bold">printf</span>(<span style="color:#a5d6ff">&#34;========test segmentation fault=======</span><span style="color:#79c0ff">\n</span><span style="color:#a5d6ff">&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#d2a8ff;font-weight:bold">printf</span>(<span style="color:#a5d6ff">&#34;==one *pt is NULL==</span><span style="color:#79c0ff">\n</span><span style="color:#a5d6ff">&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#ff7b72">if</span>(pt[<span style="color:#a5d6ff">0</span>]){
+</span></span><span style="display:flex;"><span><span style="color:#f85149">            </span><span style="color:#d2a8ff;font-weight:bold">printf</span>(<span style="color:#a5d6ff">&#34;....</span><span style="color:#79c0ff">\n</span><span style="color:#a5d6ff">&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    printf(&#34;==two array out of bounds==\n&#34;);
-</span></span><span style="display:flex;"><span>    strcat(arr,&#34;two array out of bounds&#34;);
-</span></span><span style="display:flex;"><span>    printf(&#34;arr:%s\n&#34;, arr);
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#d2a8ff;font-weight:bold">printf</span>(<span style="color:#a5d6ff">&#34;==two array out of bounds==</span><span style="color:#79c0ff">\n</span><span style="color:#a5d6ff">&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#d2a8ff;font-weight:bold">strcat</span>(arr,<span style="color:#a5d6ff">&#34;two array out of bounds&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#f85149">    </span><span style="color:#d2a8ff;font-weight:bold">printf</span>(<span style="color:#a5d6ff">&#34;arr:%s</span><span style="color:#79c0ff">\n</span><span style="color:#a5d6ff">&#34;</span>,<span style="color:#f85149"> </span>arr);
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></td></tr></table>
 </div>
@@ -778,7 +778,7 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-15-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-15-3">3</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>gcc -g -o demo test.c   //重新编译源码 增加-g选项，生成待调试信息的可执行文件
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gcc -g -o demo test.c   //重新编译源码 增加-g选项，生成待调试信息的可执行文件
 </span></span><span style="display:flex;"><span>ulimit -a               //查看core文件大小 若大小为0 无法生成core文件
 </span></span><span style="display:flex;"><span>ulimit -c unlimited	    //修改core文件大小
 </span></span></code></pre></td></tr></table>
@@ -799,15 +799,15 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-16-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-16-9">9</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>neo@neo:~/work/c_program$ gdb ./demo core
-</span></span><span style="display:flex;"><span>GNU gdb (Ubuntu 7.7.1-0ubuntu5~14.04.3) 7.7.1
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>neo@neo:~/work/c_program$ gdb ./demo core
+</span></span><span style="display:flex;"><span>GNU gdb <span style="color:#ff7b72;font-weight:bold">(</span>Ubuntu 7.7.1-0ubuntu5~14.04.3<span style="color:#ff7b72;font-weight:bold">)</span> 7.7.1
 </span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>Core was generated by `./demo&#39;.
+</span></span><span style="display:flex;"><span>Core was generated by <span style="color:#a5d6ff">`</span>./demo<span style="color:#f85149">&#39;</span>.
 </span></span><span style="display:flex;"><span>Program terminated with signal SIGSEGV, Segmentation fault.
-</span></span><span style="display:flex;"><span>#0  0x00000000004006b4 in main () at test.c:70
-</span></span><span style="display:flex;"><span>70          if(pt[0]){
-</span></span><span style="display:flex;"><span>(gdb) bt
-</span></span><span style="display:flex;"><span>#0  0x00000000004006b4 in main () at test.c:70
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#0  0x00000000004006b4 in main () at test.c:70</span>
+</span></span><span style="display:flex;"><span>70          <span style="color:#ff7b72">if</span><span style="color:#ff7b72;font-weight:bold">(</span>pt<span style="color:#ff7b72;font-weight:bold">[</span>0<span style="color:#ff7b72;font-weight:bold">]){</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">(</span>gdb<span style="color:#ff7b72;font-weight:bold">)</span> bt
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#0  0x00000000004006b4 in main () at test.c:70</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="42-openwrt系统">4.2 openwrt系统</h2>
@@ -853,37 +853,37 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-17-33"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-17-33">33</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>:~/$ ./qsdk/staging_dir/toolchain-aarch64_cortex-a53_gcc-5.2.0_musl-1.1.16/bin/aarch64-openwrt-linux-objdump -d demo1   
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>:~/$ ./qsdk/staging_dir/toolchain-aarch64_cortex-a53_gcc-5.2.0_musl-1.1.16/bin/aarch64-openwrt-linux-objdump -d demo1   
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>demo1:     file format elf64-littleaarch64
 </span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>0000000000400734 &lt;main&gt;:
-</span></span><span style="display:flex;"><span>main():
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">0000000000400734</span> &lt;main&gt;:
+</span></span><span style="display:flex;"><span>main<span style="color:#ff7b72;font-weight:bold">()</span>:
 </span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:40
-</span></span><span style="display:flex;"><span>  400734:       a9bd7bfd        stp     x29, x30, [sp,#-48]!
+</span></span><span style="display:flex;"><span>  400734:       a9bd7bfd        stp     x29, x30, <span style="color:#ff7b72;font-weight:bold">[</span>sp,#-48<span style="color:#ff7b72;font-weight:bold">]</span>!
 </span></span><span style="display:flex;"><span>  400738:       910003fd        mov     x29, sp
 </span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:65
-</span></span><span style="display:flex;"><span>  40073c:       f90017bf        str     xzr, [x29,#40]
+</span></span><span style="display:flex;"><span>  40073c:       f90017bf        str     xzr, <span style="color:#ff7b72;font-weight:bold">[</span>x29,#40<span style="color:#ff7b72;font-weight:bold">]</span>
 </span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:66
-</span></span><span style="display:flex;"><span>  400740:       f9000fbf        str     xzr, [x29,#24]
-</span></span><span style="display:flex;"><span>  400744:       790043bf        strh    wzr, [x29,#32]
+</span></span><span style="display:flex;"><span>  400740:       f9000fbf        str     xzr, <span style="color:#ff7b72;font-weight:bold">[</span>x29,#24<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>  400744:       790043bf        strh    wzr, <span style="color:#ff7b72;font-weight:bold">[</span>x29,#32<span style="color:#ff7b72;font-weight:bold">]</span>
 </span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:68
-</span></span><span style="display:flex;"><span>  400748:       90000000        adrp    x0, 400000 &lt;_init-0x4e0&gt;
-</span></span><span style="display:flex;"><span>  40074c:       9120c000        add     x0, x0, #0x830
-</span></span><span style="display:flex;"><span>  400750:       97ffff78        bl      400530 &lt;puts@plt&gt;
+</span></span><span style="display:flex;"><span>  400748:       90000000        adrp    x0, <span style="color:#a5d6ff">400000</span> &lt;_init-0x4e0&gt;
+</span></span><span style="display:flex;"><span>  40074c:       9120c000        add     x0, x0, <span style="color:#8b949e;font-style:italic">#0x830</span>
+</span></span><span style="display:flex;"><span>  400750:       97ffff78        bl      <span style="color:#a5d6ff">400530</span> &lt;puts@plt&gt;
 </span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:69
-</span></span><span style="display:flex;"><span>  400754:       90000000        adrp    x0, 400000 &lt;_init-0x4e0&gt;
-</span></span><span style="display:flex;"><span>  400758:       91216000        add     x0, x0, #0x858
-</span></span><span style="display:flex;"><span>  40075c:       97ffff75        bl      400530 &lt;puts@plt&gt;
+</span></span><span style="display:flex;"><span>  400754:       90000000        adrp    x0, <span style="color:#a5d6ff">400000</span> &lt;_init-0x4e0&gt;
+</span></span><span style="display:flex;"><span>  400758:       91216000        add     x0, x0, <span style="color:#8b949e;font-style:italic">#0x858</span>
+</span></span><span style="display:flex;"><span>  40075c:       97ffff75        bl      <span style="color:#a5d6ff">400530</span> &lt;puts@plt&gt;
 </span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:70
-</span></span><span style="display:flex;"><span>  400760:       f94017a0        ldr     x0, [x29,#40]
-</span></span><span style="display:flex;"><span>  400764:       39400000        ldrb    w0, [x0]
+</span></span><span style="display:flex;"><span>  400760:       f94017a0        ldr     x0, <span style="color:#ff7b72;font-weight:bold">[</span>x29,#40<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>  400764:       39400000        ldrb    w0, <span style="color:#ff7b72;font-weight:bold">[</span>x0<span style="color:#ff7b72;font-weight:bold">]</span>
 </span></span><span style="display:flex;"><span>  400768:       6b1f001f        cmp     w0, wzr
 </span></span><span style="display:flex;"><span>  40076c:       54000080        b.eq    40077c &lt;main+0x48&gt;
 </span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:71
-</span></span><span style="display:flex;"><span>  400770:       90000000        adrp    x0, 400000 &lt;_init-0x4e0&gt;
-</span></span><span style="display:flex;"><span>  400774:       9121c000        add     x0, x0, #0x870
-</span></span><span style="display:flex;"><span>  400778:       97ffff6e        bl      400530 &lt;puts@plt&gt;
+</span></span><span style="display:flex;"><span>  400770:       90000000        adrp    x0, <span style="color:#a5d6ff">400000</span> &lt;_init-0x4e0&gt;
+</span></span><span style="display:flex;"><span>  400774:       9121c000        add     x0, x0, <span style="color:#8b949e;font-style:italic">#0x870</span>
+</span></span><span style="display:flex;"><span>  400778:       97ffff6e        bl      <span style="color:#a5d6ff">400530</span> &lt;puts@plt&gt;
 </span></span><span style="display:flex;"><span>/home/neo/work/tmp/c_program/test.c:74
 </span></span><span style="display:flex;"><span>...
 </span></span></code></pre></td></tr></table>
@@ -898,7 +898,7 @@
 </span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-18-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-18-3">3</a>
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>:~/$ aarch64-openwrt-linux-addr2line 0x400760 -e demo1 -f
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>:~/$ aarch64-openwrt-linux-addr2line 0x400760 -e demo1 -f
 </span></span><span style="display:flex;"><span>main
 </span></span><span style="display:flex;"><span>/test.c:70
 </span></span></code></pre></td></tr></table>

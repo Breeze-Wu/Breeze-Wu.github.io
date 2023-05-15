@@ -56,12 +56,12 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-0-6&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-0-6&#34;&gt;6&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get install cppcheck  //ubuntu下安装cppcheck
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get install cppcheck  //ubuntu下安装cppcheck
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cppcheck --version              //查看版本
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cppcheck file.c				    //检测单个文件
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cppcheck path 2&amp;gt;err.txt			//检测目录下的所有c/c++文件
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cppcheck --enable=all file.c    //启用warning、performance 、information 、style、unusedFunction等不同等级检查
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cppcheck -j 4 path				//多线程检测
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cppcheck --enable&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;all file.c    //启用warning、performance 、information 、style、unusedFunction等不同等级检查
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cppcheck -j &lt;span style=&#34;color:#a5d6ff&#34;&gt;4&lt;/span&gt; path				//多线程检测
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;通常我喜欢使用下面这条命令检查指定文件目录并将检查结果存到err.txt中&lt;/p&gt;
@@ -70,7 +70,7 @@
 &lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-1-1&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-1-1&#34;&gt;1&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cppcheck --enable=all path 2&amp;gt;err.txt	//常用
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cppcheck --enable&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;all path 2&amp;gt;err.txt	//常用
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h1 id=&#34;2动态debug&#34;&gt;2、动态debug&lt;/h1&gt;
@@ -87,9 +87,9 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-2-3&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-2-3&#34;&gt;3&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;openlog(name, 0, LOG_DAEMON);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;system(LOG_ERR,&amp;#34;[%s]%d:commit error!\n&amp;#34;,__FUNCTION__,__LINE__);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;closelog();
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;openlog&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;name, 0, LOG_DAEMON&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;system&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;LOG_ERR,&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;[%s]%d:commit error!\n&amp;#34;&lt;/span&gt;,__FUNCTION__,__LINE__&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;closelog&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;()&lt;/span&gt;;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id=&#34;212-log的位置&#34;&gt;2.1.2 log的位置&lt;/h3&gt;
@@ -109,8 +109,8 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-3-2&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-3-2&#34;&gt;2&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// qsdk/.config
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_GDB=y
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// qsdk/.config
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;CONFIG_GDB&lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;编译并烧录openwrt镜像，系统起来后通过如下方式查看gdb工具是否编译成功&lt;/p&gt;
@@ -146,28 +146,28 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-4-22&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-4-22&#34;&gt;22&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) demo				        //进入调试程序
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) attach pid                //进入运行中程序调试
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) set args + 参数		    //函数传参
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) start					    //开始调试 调到main()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) list(l)					//显示10行   l 1,20/查看1-20行代码  l mian/查看main()函数附近代码 
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) break(b) n	|func		//在第n行或函数处设置普通断点
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) watch 表达式 | 变量名	    //设置观察点 变量或表达式改变时停止执行
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb)delete(d) breaknum | breakpoints	  //根据断点号删除断点  breakpoints 删除所有断点
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb)info b					//显示所有断点  //info thread  查看所有线程
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb)run(r)					//运行程序 在断点处停止
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) continue(c)			    //继续执行程序，在断点处停止
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) next(n)					//执行下一行，不进入函数
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) step(s)					//执行下一行，进入函数
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) print 变量名			    //打印变量信息
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) display 变量名		    //打印变量 执行一次后 遇到断点或程序停止执行时都会打印变量值
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) until					    //运行到退出程序
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) finish					//运行到函数返回
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) quit(q)					//退出gdb
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) condition bnum expression		//为断点(bnum)设置触发条件
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) catch event 			    //捕获事件
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) info threads              //查看线程 
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) bt                        //显示堆栈信息
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; demo				        //进入调试程序
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; attach pid                //进入运行中程序调试
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; set args + 参数		    //函数传参
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; start					    //开始调试 调到main&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; list&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;l&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;					//显示10行   l 1,20/查看1-20行代码  l mian/查看main&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;()&lt;/span&gt;函数附近代码 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; break&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;b&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; n	|func		//在第n行或函数处设置普通断点
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; watch 表达式 | 变量名	    //设置观察点 变量或表达式改变时停止执行
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;delete&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;d&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; breaknum | breakpoints	  //根据断点号删除断点  breakpoints 删除所有断点
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;info b					//显示所有断点  //info thread  查看所有线程
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;run&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;r&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;					//运行程序 在断点处停止
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff7b72&#34;&gt;continue&lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;c&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;			    //继续执行程序，在断点处停止
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; next&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;					//执行下一行，不进入函数
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; step&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;s&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;					//执行下一行，进入函数
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; print 变量名			    //打印变量信息
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; display 变量名		    //打印变量 执行一次后 遇到断点或程序停止执行时都会打印变量值
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff7b72&#34;&gt;until&lt;/span&gt;					    //运行到退出程序
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; finish					//运行到函数返回
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; quit&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;q&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;					//退出gdb
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; condition bnum expression		//为断点&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;bnum&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt;设置触发条件
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; catch event 			    //捕获事件
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; info threads              //查看线程 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; bt                        //显示堆栈信息
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;如果是在嵌入式设备内部调试程序，需要将调试程序的源码移动到嵌入设备内部，或放在U盘中，然后将U盘挂载到嵌入式设备上。进入gdb并在gdb内部指定源码位置。&lt;/p&gt;
@@ -176,7 +176,7 @@
 &lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-5-1&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-5-1&#34;&gt;1&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dir /mnt/sda1/...
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dir /mnt/sda1/...
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;23-valgrind&#34;&gt;2.3 valgrind&lt;/h2&gt;
@@ -197,14 +197,14 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-6-8&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-6-8&#34;&gt;8&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// qsdk/.config
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind=y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-cachegrind=y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-callgrind=y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-drd=y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-helgrind=y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-massif=y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-vgdb=y
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;// qsdk/.config
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;CONFIG_PACKAGE_valgrind&lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;y
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-cachegrind&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;y
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-callgrind&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;y
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-drd&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;y
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-helgrind&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;y
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-massif&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;y
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONFIG_PACKAGE_valgrind-vgdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;编译并烧录openwrt镜像，系统起来后通过如下方式查看valgrind工具是否编译成功&lt;/p&gt;
@@ -219,10 +219,10 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-7-4&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-7-4&#34;&gt;4&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --leak-check=full 程序名   //分析内存泄露问题
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --tool=callgrind 程序名    //程序调用可视化
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --tool=cachegrind 程序名   //缓存命中分析
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --tool=helgrind 程序名     //多线程资源竞争检测
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --leak-check&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;full 程序名   //分析内存泄露问题
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --tool&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;callgrind 程序名    //程序调用可视化
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --tool&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;cachegrind 程序名   //缓存命中分析
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --tool&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;helgrind 程序名     //多线程资源竞争检测
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id=&#34;233-性能图形&#34;&gt;2.3.3 性能图形&lt;/h3&gt;
@@ -233,7 +233,7 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-8-2&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-8-2&#34;&gt;2&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get install python3 graphviz
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get install python3 graphviz
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip3 install gprof2dot
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
@@ -244,7 +244,7 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-9-2&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-9-2&#34;&gt;2&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --tool=callgrind --callgrind-out-file=callgrind.out ./demo
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --tool&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;callgrind --callgrind-out-file&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;callgrind.out ./demo
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gprof2dot -f callgrind -n 0.5 -e 0.5 -s callgrind.out | dot -Tpng -o perf.png
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
@@ -290,34 +290,34 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-10-29&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-10-29&#34;&gt;29&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#include &amp;#34;stdio.h&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#include &amp;#34;string.h&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#include &amp;#34;stdlib.h&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;void test_one()
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-weight:bold;font-style:italic&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#8b949e;font-weight:bold;font-style:italic&#34;&gt; &amp;#34;stdio.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b949e;font-weight:bold;font-style:italic&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-weight:bold;font-style:italic&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#8b949e;font-weight:bold;font-style:italic&#34;&gt; &amp;#34;string.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b949e;font-weight:bold;font-style:italic&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-weight:bold;font-style:italic&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#8b949e;font-weight:bold;font-style:italic&#34;&gt; &amp;#34;stdlib.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b949e;font-weight:bold;font-style:italic&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-weight:bold;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72&#34;&gt;void&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;test_one&lt;/span&gt;()
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    char *pt = NULL;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#ff7b72&#34;&gt;char&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;*&lt;/span&gt;pt&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;NULL;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&amp;#34;==one address is NULL==\r\n&amp;#34;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    if (pt[0])
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        printf(&amp;#34;....\n&amp;#34;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;==one address is NULL==&lt;/span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;\r\n&lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#ff7b72&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;(pt[&lt;span style=&#34;color:#a5d6ff&#34;&gt;0&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;....&lt;/span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;void test_three()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72&#34;&gt;void&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;test_three&lt;/span&gt;()
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    char *pt = &amp;#34;test segment fault!&amp;#34;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#ff7b72&#34;&gt;char&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;*&lt;/span&gt;pt&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;test segment fault!&amp;#34;&lt;/span&gt;;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&amp;#34;==three read only address==\r\n&amp;#34;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    pt[0] = &amp;#39;T&amp;#39;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;==three read only address==&lt;/span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;\r\n&lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;pt[&lt;span style=&#34;color:#a5d6ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#39;T&amp;#39;&lt;/span&gt;;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;int main(void)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;main&lt;/span&gt;(&lt;span style=&#34;color:#ff7b72&#34;&gt;void&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&amp;#34;========test segmentation fault=======\r\n&amp;#34;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    test_one();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    test_three();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;========test segmentation fault=======&lt;/span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;\r\n&lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;test_one&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;test_three&lt;/span&gt;();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
@@ -334,7 +334,7 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-11-3&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-11-3&#34;&gt;3&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -g -o demo segmfaultTest.c  //-g选项，生成待调试信息的可执行文件
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -g -o demo segmfaultTest.c  //-g选项，生成待调试信息的可执行文件
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -a               //查看core文件大小 若大小为0 无法生成core文件
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -c unlimited	    //修改core文件大小
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -357,17 +357,17 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-12-11&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-12-11&#34;&gt;11&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;neo@neo:~/work/c_program$ gdb ./demo core
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;GNU gdb (Ubuntu 7.7.1-0ubuntu5~14.04.3) 7.7.1
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;neo@neo:~/work/c_program$ gdb ./demo core
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;GNU gdb &lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;Ubuntu 7.7.1-0ubuntu5~14.04.3&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; 7.7.1
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Core was generated by `./demo&amp;#39;.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Program terminated with signal SIGSEGV, Segmentation fault.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#0  0x0000000000400578 in test_three () at segmfaultTest.c:21
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;21          pt[0] = &amp;#39;T&amp;#39;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) bt
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#0  0x0000000000400578 in test_three () at segmfaultTest.c:21
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#1  0x000000000040059f in main () at segmfaultTest.c:28
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Core was generated by &lt;span style=&#34;color:#a5d6ff&#34;&gt;`&lt;/span&gt;./demo&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#39;.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;Program terminated with signal SIGSEGV, Segmentation fault.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;#0  0x0000000000400578 in test_three () at segmfaultTest.c:21
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;21          pt[0] = &amp;#39;&lt;/span&gt;T&lt;span style=&#34;color:#f85149&#34;&gt;&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; bt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;#0  0x0000000000400578 in test_three () at segmfaultTest.c:21&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;#1  0x000000000040059f in main () at segmfaultTest.c:28&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; 
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id=&#34;323-valgrind&#34;&gt;3.2.3 valgrind&lt;/h3&gt;
@@ -378,7 +378,7 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-13-2&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-13-2&#34;&gt;2&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --tool=callgrind --callgrind-out-file=callgrind.out ./demo
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;valgrind --tool&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;callgrind --callgrind-out-file&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;callgrind.out ./demo
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gprof2dot -f callgrind -n 0.5 -e 0.5 -s callgrind.out | dot -Tpng -o perf.png
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
@@ -406,20 +406,20 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-14-15&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-14-15&#34;&gt;15&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;int main(void)
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;main&lt;/span&gt;(&lt;span style=&#34;color:#ff7b72&#34;&gt;void&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    char *pt=NULL;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    char arr[10] = {0};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#ff7b72&#34;&gt;char&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;*&lt;/span&gt;pt&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;NULL;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#ff7b72&#34;&gt;char&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;arr[&lt;span style=&#34;color:#a5d6ff&#34;&gt;10&lt;/span&gt;]&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color:#a5d6ff&#34;&gt;0&lt;/span&gt;};
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&amp;#34;========test segmentation fault=======\n&amp;#34;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&amp;#34;==one *pt is NULL==\n&amp;#34;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    if(pt[0]){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            printf(&amp;#34;....\n&amp;#34;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;========test segmentation fault=======&lt;/span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;==one *pt is NULL==&lt;/span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#ff7b72&#34;&gt;if&lt;/span&gt;(pt[&lt;span style=&#34;color:#a5d6ff&#34;&gt;0&lt;/span&gt;]){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;....&lt;/span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&amp;#34;==two array out of bounds==\n&amp;#34;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    strcat(arr,&amp;#34;two array out of bounds&amp;#34;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    printf(&amp;#34;arr:%s\n&amp;#34;, arr);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;==two array out of bounds==&lt;/span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;strcat&lt;/span&gt;(arr,&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;two array out of bounds&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f85149&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#d2a8ff;font-weight:bold&#34;&gt;printf&lt;/span&gt;(&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;arr:%s&lt;/span&gt;&lt;span style=&#34;color:#79c0ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#f85149&#34;&gt; &lt;/span&gt;arr);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
@@ -435,7 +435,7 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-15-3&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-15-3&#34;&gt;3&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -g -o demo test.c   //重新编译源码 增加-g选项，生成待调试信息的可执行文件
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gcc -g -o demo test.c   //重新编译源码 增加-g选项，生成待调试信息的可执行文件
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -a               //查看core文件大小 若大小为0 无法生成core文件
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -c unlimited	    //修改core文件大小
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -456,15 +456,15 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-16-9&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-16-9&#34;&gt;9&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;neo@neo:~/work/c_program$ gdb ./demo core
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;GNU gdb (Ubuntu 7.7.1-0ubuntu5~14.04.3) 7.7.1
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;neo@neo:~/work/c_program$ gdb ./demo core
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;GNU gdb &lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;Ubuntu 7.7.1-0ubuntu5~14.04.3&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; 7.7.1
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Core was generated by `./demo&amp;#39;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Core was generated by &lt;span style=&#34;color:#a5d6ff&#34;&gt;`&lt;/span&gt;./demo&lt;span style=&#34;color:#f85149&#34;&gt;&amp;#39;&lt;/span&gt;.
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Program terminated with signal SIGSEGV, Segmentation fault.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#0  0x00000000004006b4 in main () at test.c:70
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;70          if(pt[0]){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;(gdb) bt
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;#0  0x00000000004006b4 in main () at test.c:70
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;#0  0x00000000004006b4 in main () at test.c:70&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;70          &lt;span style=&#34;color:#ff7b72&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;pt&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;[&lt;/span&gt;0&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;]){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;(&lt;/span&gt;gdb&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;)&lt;/span&gt; bt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;#0  0x00000000004006b4 in main () at test.c:70&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;42-openwrt系统&#34;&gt;4.2 openwrt系统&lt;/h2&gt;
@@ -510,37 +510,37 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-17-33&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-17-33&#34;&gt;33&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:~/$ ./qsdk/staging_dir/toolchain-aarch64_cortex-a53_gcc-5.2.0_musl-1.1.16/bin/aarch64-openwrt-linux-objdump -d demo1   
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:~/$ ./qsdk/staging_dir/toolchain-aarch64_cortex-a53_gcc-5.2.0_musl-1.1.16/bin/aarch64-openwrt-linux-objdump -d demo1   
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;demo1:     file format elf64-littleaarch64
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400734 &amp;lt;main&amp;gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;main():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;0000000000400734&lt;/span&gt; &amp;lt;main&amp;gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;main&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;()&lt;/span&gt;:
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/home/neo/work/tmp/c_program/test.c:40
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400734:       a9bd7bfd        stp     x29, x30, [sp,#-48]!
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400734:       a9bd7bfd        stp     x29, x30, &lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;[&lt;/span&gt;sp,#-48&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;]&lt;/span&gt;!
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400738:       910003fd        mov     x29, sp
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/home/neo/work/tmp/c_program/test.c:65
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  40073c:       f90017bf        str     xzr, [x29,#40]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  40073c:       f90017bf        str     xzr, &lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;[&lt;/span&gt;x29,#40&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/home/neo/work/tmp/c_program/test.c:66
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400740:       f9000fbf        str     xzr, [x29,#24]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400744:       790043bf        strh    wzr, [x29,#32]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400740:       f9000fbf        str     xzr, &lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;[&lt;/span&gt;x29,#24&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400744:       790043bf        strh    wzr, &lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;[&lt;/span&gt;x29,#32&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/home/neo/work/tmp/c_program/test.c:68
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400748:       90000000        adrp    x0, 400000 &amp;lt;_init-0x4e0&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  40074c:       9120c000        add     x0, x0, #0x830
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400750:       97ffff78        bl      400530 &amp;lt;puts@plt&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400748:       90000000        adrp    x0, &lt;span style=&#34;color:#a5d6ff&#34;&gt;400000&lt;/span&gt; &amp;lt;_init-0x4e0&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  40074c:       9120c000        add     x0, x0, &lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;#0x830&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400750:       97ffff78        bl      &lt;span style=&#34;color:#a5d6ff&#34;&gt;400530&lt;/span&gt; &amp;lt;puts@plt&amp;gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/home/neo/work/tmp/c_program/test.c:69
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400754:       90000000        adrp    x0, 400000 &amp;lt;_init-0x4e0&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400758:       91216000        add     x0, x0, #0x858
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  40075c:       97ffff75        bl      400530 &amp;lt;puts@plt&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400754:       90000000        adrp    x0, &lt;span style=&#34;color:#a5d6ff&#34;&gt;400000&lt;/span&gt; &amp;lt;_init-0x4e0&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400758:       91216000        add     x0, x0, &lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;#0x858&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  40075c:       97ffff75        bl      &lt;span style=&#34;color:#a5d6ff&#34;&gt;400530&lt;/span&gt; &amp;lt;puts@plt&amp;gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/home/neo/work/tmp/c_program/test.c:70
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400760:       f94017a0        ldr     x0, [x29,#40]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400764:       39400000        ldrb    w0, [x0]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400760:       f94017a0        ldr     x0, &lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;[&lt;/span&gt;x29,#40&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400764:       39400000        ldrb    w0, &lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;[&lt;/span&gt;x0&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;]&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400768:       6b1f001f        cmp     w0, wzr
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  40076c:       54000080        b.eq    40077c &amp;lt;main+0x48&amp;gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/home/neo/work/tmp/c_program/test.c:71
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400770:       90000000        adrp    x0, 400000 &amp;lt;_init-0x4e0&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400774:       9121c000        add     x0, x0, #0x870
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400778:       97ffff6e        bl      400530 &amp;lt;puts@plt&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400770:       90000000        adrp    x0, &lt;span style=&#34;color:#a5d6ff&#34;&gt;400000&lt;/span&gt; &amp;lt;_init-0x4e0&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400774:       9121c000        add     x0, x0, &lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;#0x870&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  400778:       97ffff6e        bl      &lt;span style=&#34;color:#a5d6ff&#34;&gt;400530&lt;/span&gt; &amp;lt;puts@plt&amp;gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/home/neo/work/tmp/c_program/test.c:74
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -555,7 +555,7 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-18-3&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-18-3&#34;&gt;3&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:~/$ aarch64-openwrt-linux-addr2line 0x400760 -e demo1 -f
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:~/$ aarch64-openwrt-linux-addr2line 0x400760 -e demo1 -f
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;main
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/test.c:70
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -597,7 +597,7 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-0-3&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-0-3&#34;&gt;3&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;//CPIO-initrd格式镜像
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;//CPIO-initrd格式镜像
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash# find . | cpio -c -o &amp;gt; ../initrd.img
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash# gzip ../initrd.img
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -613,8 +613,8 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-1-7&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-1-7&#34;&gt;7&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;//image-initrd格式镜像
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash# dd if=/dev/zero of=../initrd.img bs=512k count=5
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;//image-initrd格式镜像
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash# dd &lt;span style=&#34;color:#ff7b72&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;/dev/zero &lt;span style=&#34;color:#79c0ff&#34;&gt;of&lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;../initrd.img &lt;span style=&#34;color:#79c0ff&#34;&gt;bs&lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;512k &lt;span style=&#34;color:#79c0ff&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color:#ff7b72;font-weight:bold&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a5d6ff&#34;&gt;5&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash# mkfs.ext2 -F -m0 ../initrd.img
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash# mount -t ext2 -o loop ../initrd.img /mnt
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash# cp -r rootfs /mnt
@@ -642,7 +642,7 @@
 &lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-2-1&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-2-1&#34;&gt;1&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# tar -xvf busybox-1.31.1.tar.bz2
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# tar -xvf busybox-1.31.1.tar.bz2&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
@@ -656,10 +656,10 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-3-4&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-3-4&#34;&gt;4&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- menuconfig
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# make menuconfig
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi-
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- CONFIG_PREFIX=/.../rootfs/ install
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- menuconfig&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# make menuconfig&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi-&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- CONFIG_PREFIX=/.../rootfs/ install&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
@@ -671,8 +671,8 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-4-2&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-4-2&#34;&gt;2&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# mkdir rootfs/lib
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# cp /usr/arm-linux-gnueabi/lib/* rootfs/lib/ -rfp
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# mkdir rootfs/lib&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# cp /usr/arm-linux-gnueabi/lib/* rootfs/lib/ -rfp&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
@@ -690,14 +690,14 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c&#34; id=&#34;hl-5-8&#34;&gt;&lt;a style=&#34;outline:none;text-decoration:none;color:inherit&#34; href=&#34;#hl-5-8&#34;&gt;8&lt;/a&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# mkdir rootfs/dev
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# cd rootfs/dev
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# mknod -m 666 tty1 c 4 1
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# mknod -m 666 tty2 c 4 2
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# mknod -m 666 tty3 c 4 3
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# mknod -m 666 tty4 c 4 4
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# mknod -m 666 console c 5 1
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# mknod -m 666 null c 1 3
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# mkdir rootfs/dev&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# cd rootfs/dev&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# mknod -m 666 tty1 c 4 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# mknod -m 666 tty2 c 4 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# mknod -m 666 tty3 c 4 3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# mknod -m 666 tty4 c 4 4&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# mknod -m 666 console c 5 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b949e;font-style:italic&#34;&gt;# mknod -m 666 null c 1 3&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
