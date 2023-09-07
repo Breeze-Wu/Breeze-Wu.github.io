@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>openwrt系统的web管理流程梳理 - dgwu - A super concise theme for Hugo</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="dgwu" />
+  <meta name="description" content="摘要 本文旨在梳理总结openwrt系统的web管理的实现流程，解析大致的模块与函数调用路线，参考源码qca-networking-2019-" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.109.0" />
+
+
+<link rel="canonical" href="https://Breeze-Wu.github.io/post/openwrt%E7%B3%BB%E7%BB%9F%E7%9A%84web%E7%AE%A1%E7%90%86%E6%B5%81%E7%A8%8B%E6%A2%B3%E7%90%86/" />
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.de22abc00de44766eebd1054fd9e0b254b071f89d5019044f893c484a9249a8d.css" integrity="sha256-3iKrwA3kR2buvRBU/Z4LJUsHH4nVAZBE&#43;JPEhKkkmo0=" media="screen" crossorigin="anonymous">
+
+
+
+
+
+
+
+<meta property="og:title" content="openwrt系统的web管理流程梳理" />
+<meta property="og:description" content="摘要 本文旨在梳理总结openwrt系统的web管理的实现流程，解析大致的模块与函数调用路线，参考源码qca-networking-2019-" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Breeze-Wu.github.io/post/openwrt%E7%B3%BB%E7%BB%9F%E7%9A%84web%E7%AE%A1%E7%90%86%E6%B5%81%E7%A8%8B%E6%A2%B3%E7%90%86/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-06-11T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-06-11T00:00:00+00:00" />
+<meta itemprop="name" content="openwrt系统的web管理流程梳理">
+<meta itemprop="description" content="摘要 本文旨在梳理总结openwrt系统的web管理的实现流程，解析大致的模块与函数调用路线，参考源码qca-networking-2019-"><meta itemprop="datePublished" content="2022-06-11T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-06-11T00:00:00+00:00" />
+<meta itemprop="wordCount" content="6910">
+<meta itemprop="keywords" content="openwrt,web," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="openwrt系统的web管理流程梳理"/>
+<meta name="twitter:description" content="摘要 本文旨在梳理总结openwrt系统的web管理的实现流程，解析大致的模块与函数调用路线，参考源码qca-networking-2019-"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">dgwu</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/">Home</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/post/">Archives</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/tags/">Tags</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/about/">About</a>
+          
+        
+      </li>
+    
+
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      dgwu
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/">Home</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://Breeze-Wu.github.io/about/">About</a>
+          
+
+        
+
+      </li>
+    
+
+    
+    
+
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">openwrt系统的web管理流程梳理</h1>
+      
+
+      <div class="post-meta">
+  <div class="post-meta-author">
+    by
+      <a href="/about">
+        <span class="post-meta-author-name">
+          dgwu
+        </span>
+      </a>
+    
+  </div>
+
+  <div class="post-meta-time">
+    <time datetime="2022-06-11">
+      2022-06-11
+    </time>
+  </div>
+
+  
+
+
+  <div class="post-meta__right">
+    
+
+    
+
+
+    
+    
+
+
+    
+    
+  </div>
+</div>
+
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Table of Contents</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#21-初始化">2.1 初始化</a></li>
+    <li><a href="#22-连接侦听">2.2 连接侦听</a></li>
+    <li><a href="#23-消息处理">2.3 消息处理</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#31-client与server交互概述">3.1 client与server交互概述</a></li>
+    <li><a href="#32-luci执行流程">3.2 luci执行流程</a>
+      <ul>
+        <li><a href="#321-创建树节点c">3.2.1 创建树节点c</a></li>
+        <li><a href="#322-用户认证">3.2.2 用户认证</a></li>
+        <li><a href="#323-mvc界面生成">3.2.3 MVC界面生成</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#41-日志添加">4.1 日志添加</a></li>
+    <li><a href="#42-html与lua文件定位">4.2 html与lua文件定位</a></li>
+    <li><a href="#43-日志查看">4.3 日志查看</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+
+
+    
+    <div class="post-content">
+      <h1 id="摘要">摘要</h1>
+<p>本文旨在梳理总结openwrt系统的web管理的实现流程，解析大致的模块与函数调用路线，参考源码qca-networking-2019-spf-11-0_qca_oem。文中错误处欢迎指正交流。</p>
+<h1 id="1-简介">1 简介</h1>
+<p>OpenWrt是一种基于Linux的嵌入式操作系统，专为路由器和嵌入式设备设计。它提供了一个功能强大且灵活的Web管理界面，用于配置和管理网络设备。</p>
+<p>OpenWrt的Web管理界面采用直观的用户界面，提供了各种配置选项和功能。通过Web界面，用户可以轻松地进行网络设置、安全配置、无线网络管理和软件包管理等操作。</p>
+<p>在Web管理界面中，用户可以配置网络接口，包括LAN和WAN接口，以及静态路由和动态路由协议。用户还可以设置防火墙规则，限制特定的网络流量和端口访问。此外，用户可以配置无线网络设置，包括SSID、加密类型和访问控制。</p>
+<p>OpenWrt中使用了多个工具和技术来实现web管理，其中包括以下几个主要组件：
+<strong>uhttpd</strong>：uhttpd是一个轻量级的HTTP服务器，它被用作OpenWrt的Web服务器。它支持基本的HTTP协议，提供静态文件的传输和处理。</p>
+<p><strong>CGI</strong>：CGI（通用网关接口，Common Gateway Interface）是一种用于在Web服务器上执行外部程序或脚本的标准接口。它允许Web服务器接收HTTP请求并将请求传递给CGI程序进行处理，然后将结果返回给客户端。cgi规范参考<a href="https://datatracker.ietf.org/doc/html/rfc3875">CGI/1.1</a></p>
+<p><strong>LUCI</strong>：LuCI（Lua Configuration Interface）是OpenWrt的默认Web管理界面。它是一个基于Lua编程语言的轻量级Web框架，用于构建Web界面和应用程序。<strong>luci是满足cgi标准接口的cgi程序</strong>。</p>
+<p>浏览器与openwrt的web服务器交互流程图如下所示：
+<img src="/image/openwrt_web/aGMicRg4G2ZQkvVk.png" alt="输入图片说明"></p>
+<h1 id="2-uhttp服务模块">2 uhttp服务模块</h1>
+<p>uhttp作为OpenWrt的Web服务器，负责侦听浏览器(客户端)的连接请求，对请求做处理并返回响应结果。下面看看uhttp的架构源码实现。</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-16">16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-17"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-17">17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-18"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-18">18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-19"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-19">19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-20"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-20">20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-21"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-21">21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-22">22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-23"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-23">23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-24"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-24">24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-25"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-25">25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-26"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-26">26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-27"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-27">27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-28"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-28">28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-29"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-29">29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-30"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-30">30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-31"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-31">31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-32"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-32">32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-33"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-33">33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-34"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-34">34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-35"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-35">35</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-36"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-36">36</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-37"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-37">37</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-38"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-38">38</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-39"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-39">39</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-40"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-40">40</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-41"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-41">41</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-42"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-42">42</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-43"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-43">43</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-44"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-44">44</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-45"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-45">45</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-46"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-46">46</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-47"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-47">47</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-48"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-48">48</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-49"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-49">49</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-50"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-50">50</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-51"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-51">51</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-52"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-52">52</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-53"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-53">53</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-0-54"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-0-54">54</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">// qca-networking-2019-spf-11-0_qca_oem.git\qsdk\build_dir\target-aarch64_cortex-a53_musl-1.1.16\uhttpd-2015-11-08\main.c
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span><span style="color:#ff7b72">int</span> <span style="color:#d2a8ff;font-weight:bold">main</span>(<span style="color:#ff7b72">int</span> argc, <span style="color:#ff7b72">char</span> <span style="color:#ff7b72;font-weight:bold">**</span>argv)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#8b949e;font-style:italic">//注册http请求最底层的处理函数
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span>	<span style="color:#d2a8ff;font-weight:bold">uh_dispatch_add</span>(<span style="color:#ff7b72;font-weight:bold">&amp;</span>cgi_dispatch);
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">init_defaults_pre</span>();
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">signal</span>(SIGPIPE, SIG_IGN);
+</span></span><span style="display:flex;"><span>  <span style="color:#8b949e;font-style:italic">//解析输入参数并保存到conf结构中
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span>	<span style="color:#ff7b72">while</span> ((ch <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#d2a8ff;font-weight:bold">getopt</span>(argc, argv, <span style="color:#a5d6ff">&#34;A:aC:c:Dd:E:fh:H:I:i:K:k:L:lⓜ️N:n:p:qRr:Ss:T:t:U:u:Xx:y:&#34;</span>)) <span style="color:#ff7b72;font-weight:bold">!=</span> <span style="color:#ff7b72;font-weight:bold">-</span><span style="color:#a5d6ff">1</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">switch</span>(ch) {
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">case</span> <span style="color:#a5d6ff">&#39;h&#39;</span><span style="color:#ff7b72;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff7b72">if</span> (<span style="color:#ff7b72;font-weight:bold">!</span><span style="color:#d2a8ff;font-weight:bold">realpath</span>(optarg, uh_buf)) {
+</span></span><span style="display:flex;"><span>				<span style="color:#d2a8ff;font-weight:bold">fprintf</span>(stderr, <span style="color:#a5d6ff">&#34;Error: Invalid directory %s: %s</span><span style="color:#79c0ff">\n</span><span style="color:#a5d6ff">&#34;</span>,
+</span></span><span style="display:flex;"><span>						optarg, <span style="color:#d2a8ff;font-weight:bold">strerror</span>(errno));
+</span></span><span style="display:flex;"><span>				<span style="color:#d2a8ff;font-weight:bold">exit</span>(<span style="color:#a5d6ff">1</span>);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			conf.docroot <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#d2a8ff;font-weight:bold">strdup</span>(uh_buf);
+</span></span><span style="display:flex;"><span>			<span style="color:#ff7b72">break</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">case</span> <span style="color:#a5d6ff">&#39;H&#39;</span><span style="color:#ff7b72;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff7b72">if</span> (<span style="color:#d2a8ff;font-weight:bold">uh_handler_add</span>(optarg)) {
+</span></span><span style="display:flex;"><span>				<span style="color:#d2a8ff;font-weight:bold">fprintf</span>(stderr, <span style="color:#a5d6ff">&#34;Error: Failed to load handler script %s</span><span style="color:#79c0ff">\n</span><span style="color:#a5d6ff">&#34;</span>,
+</span></span><span style="display:flex;"><span>					optarg);
+</span></span><span style="display:flex;"><span>				<span style="color:#d2a8ff;font-weight:bold">exit</span>(<span style="color:#a5d6ff">1</span>);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#ff7b72">break</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">case</span> <span style="color:#a5d6ff">&#39;E&#39;</span><span style="color:#ff7b72;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff7b72">if</span> (optarg[<span style="color:#a5d6ff">0</span>] <span style="color:#ff7b72;font-weight:bold">!=</span> <span style="color:#a5d6ff">&#39;/&#39;</span>) {
+</span></span><span style="display:flex;"><span>				<span style="color:#d2a8ff;font-weight:bold">fprintf</span>(stderr, <span style="color:#a5d6ff">&#34;Error: Invalid error handler: %s</span><span style="color:#79c0ff">\n</span><span style="color:#a5d6ff">&#34;</span>,
+</span></span><span style="display:flex;"><span>						optarg);
+</span></span><span style="display:flex;"><span>				<span style="color:#d2a8ff;font-weight:bold">exit</span>(<span style="color:#a5d6ff">1</span>);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			conf.error_handler <span style="color:#ff7b72;font-weight:bold">=</span> optarg;
+</span></span><span style="display:flex;"><span>			<span style="color:#ff7b72">break</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">case</span> <span style="color:#a5d6ff">&#39;I&#39;</span><span style="color:#ff7b72;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff7b72">if</span> (optarg[<span style="color:#a5d6ff">0</span>] <span style="color:#ff7b72;font-weight:bold">==</span> <span style="color:#a5d6ff">&#39;/&#39;</span>) {
+</span></span><span style="display:flex;"><span>				<span style="color:#d2a8ff;font-weight:bold">fprintf</span>(stderr, <span style="color:#a5d6ff">&#34;Error: Invalid index page: %s</span><span style="color:#79c0ff">\n</span><span style="color:#a5d6ff">&#34;</span>,
+</span></span><span style="display:flex;"><span>						optarg);
+</span></span><span style="display:flex;"><span>				<span style="color:#d2a8ff;font-weight:bold">exit</span>(<span style="color:#a5d6ff">1</span>);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#d2a8ff;font-weight:bold">uh_index_add</span>(optarg);
+</span></span><span style="display:flex;"><span>			<span style="color:#ff7b72">break</span>;
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">default</span><span style="color:#ff7b72;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#8b949e;font-style:italic">//uhttp使用介绍
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span>			<span style="color:#ff7b72">return</span> <span style="color:#d2a8ff;font-weight:bold">usage</span>(argv[<span style="color:#a5d6ff">0</span>]);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>		<span style="color:#8b949e;font-style:italic">// 侦听客户端连接
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span>		<span style="color:#ff7b72">return</span> <span style="color:#d2a8ff;font-weight:bold">run_server</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="21-初始化">2.1 初始化</h2>
+<p>初始化过程主要负责把cgi的处理函数注册到全局链表dispatch_handlers中，并且解析main输入参数，填充到全局结构量conf中。</p>
+<h2 id="22-连接侦听">2.2 连接侦听</h2>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-1-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-16">16</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#ff7b72">static</span> <span style="color:#ff7b72">int</span> <span style="color:#d2a8ff;font-weight:bold">run_server</span>(<span style="color:#ff7b72">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">uloop_init</span>();
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">uh_setup_listeners</span>();
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">uh_plugin_post_init</span>();
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">uloop_run</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff7b72">return</span> <span style="color:#a5d6ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">void</span> <span style="color:#d2a8ff;font-weight:bold">uh_setup_listeners</span>(<span style="color:#ff7b72">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>		l<span style="color:#ff7b72;font-weight:bold">-&gt;</span>fd.cb <span style="color:#ff7b72;font-weight:bold">=</span> listener_cb;
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">uloop_fd_add</span>(<span style="color:#ff7b72;font-weight:bold">&amp;</span>l<span style="color:#ff7b72;font-weight:bold">-&gt;</span>fd, ULOOP_READ);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>run_server中使用libubox库创建epoll，在uh_setup_listeners中将初始化过程创建的socket加入epoll，并配置连接请求处理函数，最后调用uloop_run运行epoll_wait，等待浏览器连接。</p>
+<h2 id="23-消息处理">2.3 消息处理</h2>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-16">16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-17"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-17">17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-18"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-18">18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-19"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-19">19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-20"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-20">20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-21"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-21">21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-22">22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-23"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-23">23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-24"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-24">24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-25"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-25">25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-26"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-26">26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-2-27"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-2-27">27</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">// qca-networking-2019-spf-11-0_qca_oem.git/qsdk/build_dir/target-aarch64_cortex-a53_musl-1.1.16/uhttpd-2015-11-08/listen.c
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span><span style="color:#ff7b72">static</span> <span style="color:#ff7b72">void</span> <span style="color:#d2a8ff;font-weight:bold">listener_cb</span>(<span style="color:#ff7b72">struct</span> uloop_fd <span style="color:#ff7b72;font-weight:bold">*</span>fd, <span style="color:#ff7b72">unsigned</span> <span style="color:#ff7b72">int</span> events)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>	<span style="color:#ff7b72">while</span> (<span style="color:#a5d6ff">1</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">if</span> (<span style="color:#ff7b72;font-weight:bold">!</span><span style="color:#d2a8ff;font-weight:bold">uh_accept_client</span>(fd<span style="color:#ff7b72;font-weight:bold">-&gt;</span>fd, l<span style="color:#ff7b72;font-weight:bold">-&gt;</span>tls))
+</span></span><span style="display:flex;"><span>			<span style="color:#ff7b72">break</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">// qca-networking-2019-spf-11-0_qca_oem.git/qsdk/build_dir/target-aarch64_cortex-a53_musl-1.1.16/uhttpd-2015-11-08/client.c
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span><span style="color:#ff7b72">bool</span> <span style="color:#d2a8ff;font-weight:bold">uh_accept_client</span>(<span style="color:#ff7b72">int</span> fd, <span style="color:#ff7b72">bool</span> tls)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>	sfd <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#d2a8ff;font-weight:bold">accept</span>(fd, (<span style="color:#ff7b72">struct</span> sockaddr <span style="color:#ff7b72;font-weight:bold">*</span>) <span style="color:#ff7b72;font-weight:bold">&amp;</span>addr, <span style="color:#ff7b72;font-weight:bold">&amp;</span>sl);
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>		cl<span style="color:#ff7b72;font-weight:bold">-&gt;</span>us<span style="color:#ff7b72;font-weight:bold">-&gt;</span>notify_read <span style="color:#ff7b72;font-weight:bold">=</span> client_ustream_read_cb;
+</span></span><span style="display:flex;"><span>		cl<span style="color:#ff7b72;font-weight:bold">-&gt;</span>us<span style="color:#ff7b72;font-weight:bold">-&gt;</span>notify_write <span style="color:#ff7b72;font-weight:bold">=</span> client_ustream_write_cb;
+</span></span><span style="display:flex;"><span>		cl<span style="color:#ff7b72;font-weight:bold">-&gt;</span>us<span style="color:#ff7b72;font-weight:bold">-&gt;</span>notify_state <span style="color:#ff7b72;font-weight:bold">=</span> client_notify_state;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">ustream_fd_init</span>(<span style="color:#ff7b72;font-weight:bold">&amp;</span>cl<span style="color:#ff7b72;font-weight:bold">-&gt;</span>sfd, sfd);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">uh_poll_connection</span>(cl);
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">list_add_tail</span>(<span style="color:#ff7b72;font-weight:bold">&amp;</span>cl<span style="color:#ff7b72;font-weight:bold">-&gt;</span>list, <span style="color:#ff7b72;font-weight:bold">&amp;</span>clients);
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>uh_accept_client接受客户端连接并<strong>新建一个socket</strong>，配置新socket的读写处理函数，调用ustream_fd_init使用libubox库接口，将sfd加到前面创建的epoll中，接着调用uh_poll_connection设置定时读取新socket内容。</p>
+<p>下面继续看浏览器与web服务器的交互过程</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-16">16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-17"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-17">17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-18"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-18">18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-19"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-19">19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-20"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-20">20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-21"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-21">21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-22">22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-23"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-23">23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-24"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-24">24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-25"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-25">25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-26"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-26">26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-27"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-27">27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-3-28"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-3-28">28</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">// qca-networking-2019-spf-11-0_qca_oem.git/qsdk/build_dir/target-aarch64_cortex-a53_musl-1.1.16/uhttpd-2015-11-08/client.c
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">static</span> <span style="color:#ff7b72">void</span> <span style="color:#d2a8ff;font-weight:bold">client_ustream_read_cb</span>(<span style="color:#ff7b72">struct</span> ustream <span style="color:#ff7b72;font-weight:bold">*</span>s, <span style="color:#ff7b72">int</span> bytes)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#ff7b72">struct</span> client <span style="color:#ff7b72;font-weight:bold">*</span>cl <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#d2a8ff;font-weight:bold">container_of</span>(s, <span style="color:#ff7b72">struct</span> client, sfd.stream);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">uh_client_read_cb</span>(cl);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">typedef</span> <span style="color:#d2a8ff;font-weight:bold">bool</span> (<span style="color:#ff7b72;font-weight:bold">*</span><span style="color:#ff7b72">read_cb_t</span>)(<span style="color:#ff7b72">struct</span> client <span style="color:#ff7b72;font-weight:bold">*</span>cl, <span style="color:#ff7b72">char</span> <span style="color:#ff7b72;font-weight:bold">*</span>buf, <span style="color:#ff7b72">int</span> len);
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">static</span> <span style="color:#ff7b72">read_cb_t</span> read_cbs[] <span style="color:#ff7b72;font-weight:bold">=</span> {
+</span></span><span style="display:flex;"><span>	[CLIENT_STATE_INIT] <span style="color:#ff7b72;font-weight:bold">=</span> client_init_cb,
+</span></span><span style="display:flex;"><span>	[CLIENT_STATE_HEADER] <span style="color:#ff7b72;font-weight:bold">=</span> client_header_cb,
+</span></span><span style="display:flex;"><span>	[CLIENT_STATE_DATA] <span style="color:#ff7b72;font-weight:bold">=</span> client_data_cb,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">void</span> <span style="color:#d2a8ff;font-weight:bold">uh_client_read_cb</span>(<span style="color:#ff7b72">struct</span> client <span style="color:#ff7b72;font-weight:bold">*</span>cl)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>	client_done <span style="color:#ff7b72;font-weight:bold">=</span> false;
+</span></span><span style="display:flex;"><span>	<span style="color:#ff7b72">do</span> {
+</span></span><span style="display:flex;"><span>		str <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#d2a8ff;font-weight:bold">ustream_get_read_buf</span>(us, <span style="color:#ff7b72;font-weight:bold">&amp;</span>len);
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">if</span> (<span style="color:#ff7b72;font-weight:bold">!</span>read_cbs[cl<span style="color:#ff7b72;font-weight:bold">-&gt;</span>state](cl, str, len)) {
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	} <span style="color:#ff7b72">while</span> (<span style="color:#ff7b72;font-weight:bold">!</span>client_done);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在uh_client_read_cb中，服务端接收浏览器发过来的数据，进到while循环中分别调用read_cbs中的三个函数解析http的请求行、请求头、数据内容。http的数据内容通常使用post消息发送，用于传输用户输入的信息到uhttp中，如用户名与密钥。</p>
+<p>解析完请求头后会走到client_header_complete -&gt; uh_handle_request 查找到请求行中cgi处理的dispatch，调用d-&gt;handle_request函数走到cgi程序中处理请求。</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-16">16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-17"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-17">17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-18"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-18">18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-19"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-19">19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-20"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-20">20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-21"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-21">21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-22">22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-23"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-23">23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-24"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-24">24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-25"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-25">25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-26"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-26">26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-27"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-27">27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-28"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-28">28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-29"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-29">29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-30"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-30">30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-31"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-31">31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-32"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-32">32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-33"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-33">33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-34"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-34">34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-35"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-35">35</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-36"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-36">36</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-37"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-37">37</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-38"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-38">38</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-39"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-39">39</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-40"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-40">40</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-41"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-41">41</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-42"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-42">42</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-43"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-43">43</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-44"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-44">44</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-45"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-45">45</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-46"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-46">46</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-47"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-47">47</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-48"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-48">48</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-49"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-49">49</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-50"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-50">50</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-51"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-51">51</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-52"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-52">52</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-53"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-53">53</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-54"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-54">54</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-55"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-55">55</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-56"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-56">56</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-57"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-57">57</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-58"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-58">58</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-59"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-59">59</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-60"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-60">60</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-61"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-61">61</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-62"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-62">62</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-63"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-63">63</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-64"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-64">64</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-4-65"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-4-65">65</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">// qca-networking-2019-spf-11-0_qca_oem.git/qsdk/build_dir/target-aarch64_cortex-a53_musl-1.1.16/uhttpd-2015-11-08/cgi.c
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span><span style="color:#ff7b72">static</span> <span style="color:#ff7b72">void</span> <span style="color:#d2a8ff;font-weight:bold">cgi_handle_request</span>(<span style="color:#ff7b72">struct</span> client <span style="color:#ff7b72;font-weight:bold">*</span>cl, <span style="color:#ff7b72">char</span> <span style="color:#ff7b72;font-weight:bold">*</span>url, <span style="color:#ff7b72">struct</span> path_info <span style="color:#ff7b72;font-weight:bold">*</span>pi)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>	<span style="color:#ff7b72">if</span> (<span style="color:#ff7b72;font-weight:bold">!</span><span style="color:#d2a8ff;font-weight:bold">uh_create_process</span>(cl, pi, url, cgi_main)) {
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">uh_client_error</span>(cl, <span style="color:#a5d6ff">500</span>, <span style="color:#a5d6ff">&#34;Internal Server Error&#34;</span>,
+</span></span><span style="display:flex;"><span>				<span style="color:#a5d6ff">&#34;Failed to create CGI process: %s&#34;</span>, <span style="color:#d2a8ff;font-weight:bold">strerror</span>(errno));
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">return</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">// qca-networking-2019-spf-11-0_qca_oem.git/qsdk/build_dir/target-aarch64_cortex-a53_musl-1.1.16/uhttpd-2015-11-08/proc.c
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span><span style="color:#ff7b72">bool</span> <span style="color:#d2a8ff;font-weight:bold">uh_create_process</span>(<span style="color:#ff7b72">struct</span> client <span style="color:#ff7b72;font-weight:bold">*</span>cl, <span style="color:#ff7b72">struct</span> path_info <span style="color:#ff7b72;font-weight:bold">*</span>pi, <span style="color:#ff7b72">char</span> <span style="color:#ff7b72;font-weight:bold">*</span>url,
+</span></span><span style="display:flex;"><span>		       <span style="color:#ff7b72">void</span> (<span style="color:#ff7b72;font-weight:bold">*</span>cb)(<span style="color:#ff7b72">struct</span> client <span style="color:#ff7b72;font-weight:bold">*</span>cl, <span style="color:#ff7b72">struct</span> path_info <span style="color:#ff7b72;font-weight:bold">*</span>pi, <span style="color:#ff7b72">char</span> <span style="color:#ff7b72;font-weight:bold">*</span>url))
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>	<span style="color:#ff7b72">if</span> (<span style="color:#d2a8ff;font-weight:bold">pipe</span>(rfd))
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">return</span> false;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff7b72">if</span> (<span style="color:#d2a8ff;font-weight:bold">pipe</span>(wfd))
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">goto</span> close_rfd;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	pid <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#d2a8ff;font-weight:bold">fork</span>();
+</span></span><span style="display:flex;"><span>	<span style="color:#ff7b72">if</span> (pid <span style="color:#ff7b72;font-weight:bold">&lt;</span> <span style="color:#a5d6ff">0</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff7b72">goto</span> close_wfd;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8b949e;font-style:italic">//子进程中将读写管道设置为标准输入、输出
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span>	<span style="color:#ff7b72">if</span> (<span style="color:#ff7b72;font-weight:bold">!</span>pid) {
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">close</span>(<span style="color:#a5d6ff">0</span>);
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">close</span>(<span style="color:#a5d6ff">1</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">dup2</span>(rfd[<span style="color:#a5d6ff">1</span>], <span style="color:#a5d6ff">1</span>);  <span style="color:#8b949e;font-style:italic">//向uhttp发送数据的通道
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span>		<span style="color:#d2a8ff;font-weight:bold">dup2</span>(wfd[<span style="color:#a5d6ff">0</span>], <span style="color:#a5d6ff">0</span>);  <span style="color:#8b949e;font-style:italic">//接收uhttp数据的通道
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span>
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">close</span>(rfd[<span style="color:#a5d6ff">0</span>]);
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">close</span>(rfd[<span style="color:#a5d6ff">1</span>]);
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">close</span>(wfd[<span style="color:#a5d6ff">0</span>]);
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">close</span>(wfd[<span style="color:#a5d6ff">1</span>]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">uh_close_fds</span>();
+</span></span><span style="display:flex;"><span>		<span style="color:#8b949e;font-style:italic">//调用luci脚本程序
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span>		<span style="color:#d2a8ff;font-weight:bold">cb</span>(cl, pi, url);
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">exit</span>(<span style="color:#a5d6ff">0</span>);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">close</span>(rfd[<span style="color:#a5d6ff">1</span>]);
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">close</span>(wfd[<span style="color:#a5d6ff">0</span>]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	proc<span style="color:#ff7b72;font-weight:bold">-&gt;</span>wrfd.fd <span style="color:#ff7b72;font-weight:bold">=</span> wfd[<span style="color:#a5d6ff">1</span>];
+</span></span><span style="display:flex;"><span>	<span style="color:#d2a8ff;font-weight:bold">uh_relay_open</span>(cl, <span style="color:#ff7b72;font-weight:bold">&amp;</span>proc<span style="color:#ff7b72;font-weight:bold">-&gt;</span>r, rfd[<span style="color:#a5d6ff">0</span>], pid);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8b949e;font-style:italic">//配置uhttp与luci交互的接口函数
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"></span>	d<span style="color:#ff7b72;font-weight:bold">-&gt;</span>free <span style="color:#ff7b72;font-weight:bold">=</span> proc_free;
+</span></span><span style="display:flex;"><span>	d<span style="color:#ff7b72;font-weight:bold">-&gt;</span>close_fds <span style="color:#ff7b72;font-weight:bold">=</span> proc_close_fds;
+</span></span><span style="display:flex;"><span>	d<span style="color:#ff7b72;font-weight:bold">-&gt;</span>data_send <span style="color:#ff7b72;font-weight:bold">=</span> proc_data_send;
+</span></span><span style="display:flex;"><span>	d<span style="color:#ff7b72;font-weight:bold">-&gt;</span>data_done <span style="color:#ff7b72;font-weight:bold">=</span> proc_write_close;
+</span></span><span style="display:flex;"><span>	d<span style="color:#ff7b72;font-weight:bold">-&gt;</span>write_cb <span style="color:#ff7b72;font-weight:bold">=</span> proc_relay_write_cb;
+</span></span><span style="display:flex;"><span>	proc<span style="color:#ff7b72;font-weight:bold">-&gt;</span>r.header_cb <span style="color:#ff7b72;font-weight:bold">=</span> proc_handle_header;
+</span></span><span style="display:flex;"><span>	proc<span style="color:#ff7b72;font-weight:bold">-&gt;</span>r.header_end <span style="color:#ff7b72;font-weight:bold">=</span> proc_handle_header_end;
+</span></span><span style="display:flex;"><span>	proc<span style="color:#ff7b72;font-weight:bold">-&gt;</span>r.close <span style="color:#ff7b72;font-weight:bold">=</span> proc_handle_close;
+</span></span><span style="display:flex;"><span>	proc<span style="color:#ff7b72;font-weight:bold">-&gt;</span>wrfd.cb <span style="color:#ff7b72;font-weight:bold">=</span> proc_write_cb;
+</span></span><span style="display:flex;"><span>	proc<span style="color:#ff7b72;font-weight:bold">-&gt;</span>timeout.cb <span style="color:#ff7b72;font-weight:bold">=</span> proc_timeout_cb;
+</span></span><span style="display:flex;"><span>	<span style="color:#ff7b72">if</span> (conf.script_timeout <span style="color:#ff7b72;font-weight:bold">&gt;</span> <span style="color:#a5d6ff">0</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#d2a8ff;font-weight:bold">uloop_timeout_set</span>(<span style="color:#ff7b72;font-weight:bold">&amp;</span>proc<span style="color:#ff7b72;font-weight:bold">-&gt;</span>timeout, conf.script_timeout <span style="color:#ff7b72;font-weight:bold">*</span> <span style="color:#a5d6ff">1000</span>);
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>首先创建了两个pipe，这实际上是利用AF_UNIX协议域，创建两个相连的socket_unix，那么它们映射的文件描述符（即这里的rfd[0]、rfd[1]）就构成了一个pipe，且这种关系即使fork后也仍然存在，因为fork仅是增加文件的引用次数，而os维护的file结构和socket结构都没变，这就是父子进程间传递数据的方式。然后fork出一个子进程。</p>
+<p>子进程中将标准输入、输出文件替换成了wfd[0]、rfd[1]，这样就可以和父进程通过读写管道的方式实现进程间通信。另外，在cgi_main中使用setenv设置环境变量的方式传递cgi程序需要的参数信息，如PATH_INFO， 接着会调用exec函数进入cgi程序中执行http消息处理、返回web界面给浏览器。</p>
+<p>为什么要两个pipe，因为子进程向父进程传递回馈数据需要一个out-pipe，而若有post数据，子进程还需要一个in-pipe，从父进程读取post数据。</p>
+<p>以上就是uhttp服务接收浏览器连接请求，并调用cgi程序响应请求的过程，流程图如下
+<img src="/image/openwrt_web/7e2tM9RRNKhfrBtu.png" alt="输入图片说明"></p>
+<h1 id="3-luci模块">3 luci模块</h1>
+<h2 id="31-client与server交互概述">3.1 client与server交互概述</h2>
+<p>Client端和serv端采用cgi方式交互，uhttpd服务器的cgi方式中，fork出一个子进程，子进程利用execl替换为luci进程空间，并通过setenv环境变量的方式，传递一些固定格式的数据（如PATH_INFO）给luci。另外一些非固定格式的数据（post-data）则由父进程通过一个w_pipe写给luci的stdin，而luci的返回数据则写在stdout上，由父进程通过一个r_pipe读取。</p>
+<p>下面的图描述了web配置时的数据交互：
+<img src="/image/openwrt_web/MzYna5EBTmZF4HCf.png" alt="输入图片说明">
+1、首次运行时，是以普通的file方式获得docroot/index.html，该文件中以meta的方式自动跳转到cgi的url，这是web服务器的一般做法。</p>
+<p>2、然后第一次执行luci，path_info=&rsquo;/&rsquo;，会alise到&rsquo;/admin&rsquo;（&rsquo;/&lsquo;会索引到 tree.rootnode，并执行其target方法，即alise(&rsquo;/admin&rsquo;)，即重新去索引adminnode，这在后面会详细描述），该节点需要认证，所以返回一个登录界面。</p>
+<p>3、第3次交互，过程同上一次的，只是这时已post来了登录信息，所以serv端会生成一个session值，然后执行&rsquo;/admin&rsquo;的target（它的target为firstchild，即索引第一个子节点），最终返回/admin/status.html，同时会把session值以cookie的形式发给client。这就是从原始状态到得到显示页面的过程，之后主要就是点击页面上的连接，产生新的request。</p>
+<p>4、每个链接的url中都会带有一个stok值（它是serv生成的，并放在html中的url里），并且每个新request都要带有session值，它和stok值一起供serv端联合认证。</p>
+<h2 id="32-luci执行流程">3.2 luci执行流程</h2>
+<p>luci脚本文件使用lua语言实现，下面一起看看cgi-bin/luci文件内容</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-1">1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-2">2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-3">3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-4">4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-5">5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-6">6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-7">7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-8">8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-5-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-5-9">9</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 指定解释器位置
+</span></span><span style="display:flex;"><span>#!/usr/bin/lua
+</span></span><span style="display:flex;"><span>// 加载两个lua脚本文件
+</span></span><span style="display:flex;"><span>require &#34;luci.cacheloader&#34;
+</span></span><span style="display:flex;"><span>require &#34;luci.sgi.cgi&#34;
+</span></span><span style="display:flex;"><span>//定义一个变量
+</span></span><span style="display:flex;"><span>luci.dispatcher.indexcache = &#34;/tmp/luci-indexcache&#34;
+</span></span><span style="display:flex;"><span>//执行函数
+</span></span><span style="display:flex;"><span>luci.sgi.cgi.run()
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>文件与shell脚本的格式类似，第一行指定了脚本解释器为/usr/bin/lua，最后一行调用cig.lua文件中的run函数。继续看run函数实现</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-16">16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-17"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-17">17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-18"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-18">18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-19"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-19">19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-20"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-20">20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-21"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-21">21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-22">22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-23"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-23">23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-24"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-24">24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-25"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-25">25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-26"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-26">26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-27"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-27">27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-28"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-28">28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-29"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-29">29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-30"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-30">30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-6-31"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-6-31">31</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// /usr/bin/lua/luci.sgi.cgi
+</span></span><span style="display:flex;"><span>function run()
+</span></span><span style="display:flex;"><span>	//创建request的结构
+</span></span><span style="display:flex;"><span>	local r = luci.http.Request(
+</span></span><span style="display:flex;"><span>		luci.sys.getenv(),
+</span></span><span style="display:flex;"><span>		limitsource(io.stdin, tonumber(luci.sys.getenv(&#34;CONTENT_LENGTH&#34;))),
+</span></span><span style="display:flex;"><span>		ltn12.sink.file(io.stderr)
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>	//创建一个线程处理httpdispatch函数
+</span></span><span style="display:flex;"><span>	local x = coroutine.create(luci.dispatcher.httpdispatch)
+</span></span><span style="display:flex;"><span>	local hcache = &#34;&#34;
+</span></span><span style="display:flex;"><span>	local active = true
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	while coroutine.status(x) ~= &#34;dead&#34; do
+</span></span><span style="display:flex;"><span>		//运行线程
+</span></span><span style="display:flex;"><span>		local res, id, data1, data2 = coroutine.resume(x, r)
+</span></span><span style="display:flex;"><span>		if active then
+</span></span><span style="display:flex;"><span>			if id == 1 then
+</span></span><span style="display:flex;"><span>					io.write(&#34;Status: &#34; .. tostring(data1) .. &#34; &#34; .. data2 .. &#34;\r\n&#34;)
+</span></span><span style="display:flex;"><span>			elseif id == 2 then
+</span></span><span style="display:flex;"><span>					hcache = hcache .. data1 .. &#34;: &#34; .. data2 .. &#34;\r\n&#34;
+</span></span><span style="display:flex;"><span>			elseif id == 3 then
+</span></span><span style="display:flex;"><span>					io.write(hcache)
+</span></span><span style="display:flex;"><span>					io.write(&#34;\r\n&#34;)
+</span></span><span style="display:flex;"><span>			elseif id == 4 then
+</span></span><span style="display:flex;"><span>				io.write(tostring(data1 or &#34;&#34;))
+</span></span><span style="display:flex;"><span>			...
+</span></span><span style="display:flex;"><span>			end
+</span></span><span style="display:flex;"><span>		end
+</span></span><span style="display:flex;"><span>	end
+</span></span><span style="display:flex;"><span>end
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>run函数首先创建一个http请求的结构，并将环境变量、标准输入、标准错误输出作为Request接口的输入参数，函数返回一个Request结构的实体。接着调用create创建一个线程，线程会运行出入的httpdispatch函数。最后在while循环中等待线程退出并判断不同返回值，调用标准输出口向uhttp发送数据。<strong>这里的io.write、io.stdin对应线程的标准输出与输入口，也就是在uhttp中创新的那两个pipe，用于cgi程序进程和uhttp进程通信使用</strong>。</p>
+<p>继续看httpdispatch函数实现</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-16">16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-17"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-17">17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-18"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-18">18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-19"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-19">19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-20"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-20">20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-21"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-21">21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-22">22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-23"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-23">23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-24"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-24">24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-25"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-25">25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-26"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-26">26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-27"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-27">27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-28"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-28">28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-29"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-29">29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-30"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-30">30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-31"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-31">31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-32"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-32">32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-33"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-33">33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-34"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-34">34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-35"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-35">35</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-36"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-36">36</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-37"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-37">37</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-38"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-38">38</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-39"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-39">39</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-40"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-40">40</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-41"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-41">41</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-7-42"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-7-42">42</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>function httpdispatch(request, prefix)
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>	local pathinfo = http.urldecode(request:getenv(&#34;PATH_INFO&#34;) or &#34;&#34;, true)
+</span></span><span style="display:flex;"><span>	local tokensok = true
+</span></span><span style="display:flex;"><span>	//匹配请求行中是否存在token值
+</span></span><span style="display:flex;"><span>	for node in pathinfo:gmatch(&#34;[^/]+&#34;) do
+</span></span><span style="display:flex;"><span>		local tkey, tval
+</span></span><span style="display:flex;"><span>		if tokensok then
+</span></span><span style="display:flex;"><span>			tkey, tval = node:match(&#34;;(%w+)=([a-fA-F0-9]*)&#34;)
+</span></span><span style="display:flex;"><span>		end
+</span></span><span style="display:flex;"><span>		if tkey then
+</span></span><span style="display:flex;"><span>			context.urltoken[tkey] = tval
+</span></span><span style="display:flex;"><span>		else
+</span></span><span style="display:flex;"><span>			tokensok = false
+</span></span><span style="display:flex;"><span>			r[#r+1] = node
+</span></span><span style="display:flex;"><span>		end
+</span></span><span style="display:flex;"><span>	end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	//运行dispatch函数处理http请求
+</span></span><span style="display:flex;"><span>	local stat, err = util.coxpcall(function()
+</span></span><span style="display:flex;"><span>		dispatch(context.request)
+</span></span><span style="display:flex;"><span>	end, error500)
+</span></span><span style="display:flex;"><span>	//关闭http处理
+</span></span><span style="display:flex;"><span>	http.close()
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>function dispatch(request)
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>	//创建node节点
+</span></span><span style="display:flex;"><span>	if not c then
+</span></span><span style="display:flex;"><span>		c = createtree()
+</span></span><span style="display:flex;"><span>	end
+</span></span><span style="display:flex;"><span>	// 初始化需要显示的界面
+</span></span><span style="display:flex;"><span>	if (c and c.index) or not track.notemplate then
+</span></span><span style="display:flex;"><span>		if not pcall(tpl.Template, &#34;themes/%s/header&#34; % fs.basename(media)) then
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>	//用户认证
+</span></span><span style="display:flex;"><span>	if track.sysauth then
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span>	//调用node节点的target函数
+</span></span><span style="display:flex;"><span>	if type(target) == &#34;function&#34; then
+</span></span><span style="display:flex;"><span>		util.copcall(function()
+</span></span><span style="display:flex;"><span>	...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>httpdispatch首先从请求体中取出PATH_INFO这个环境变量，使用正则匹配或者token值，这里的token值是服务器认证通过浏览器的连接请求后给浏览器动态生成的标记，以后浏览器的每次http请求都会在请求行中携带该值。接着运行dispatch。在分析dispatch实现之前我们先来看看luci中的文件目录结构。</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-8-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-8-11">11</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 下面是openwrt系统运行后的目录布局
+</span></span><span style="display:flex;"><span>/www/index.html
+</span></span><span style="display:flex;"><span>   /cgi-bin/luci
+</span></span><span style="display:flex;"><span>   /luci-static/xxx/xx.css、js、gif
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/usr/lib/lua/nixio.so、uci.so
+</span></span><span style="display:flex;"><span>					 /luci/sgi/cgi.lua
+</span></span><span style="display:flex;"><span>        /luci/http.lua、dispatcher.lua、core…
+</span></span><span style="display:flex;"><span>            /controller/xxx.lua
+</span></span><span style="display:flex;"><span>            /model/xxx.lua
+</span></span><span style="display:flex;"><span>            /view/xxx.lua
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="321-创建树节点c">3.2.1 创建树节点c</h3>
+<p>在controller目录下，每个.lua文件中，都有一个index()函数，其中主要调用entry()函数，形如entry(path,target,title,order)，path形如{admin,network,wireless}，entry()函数根据这些创建一个node，并把它放在全局node-tree的相应位置，后面的参数都是该node的属性，还可以有其他的参数。其中最重要的就是target</p>
+<p>dispatch中首先创建node节点，调用Createtree函数找到controller目录下所有的.lua文件，并找到其中的index()函数执行，从而生成一个node-tree。最终生成的tree如下图所示
+<img src="/image/openwrt_web/ePoe7Yz8T4aBlFYi.png" alt="输入图片说明"></p>
+<p>这里要注意的是，每次dispatch()会根据path_info逐层索引，且每一层都把找到的节点信息放在一个变量track中，这样做使得上层node的信息会影响下层node，而下层node的信息又会覆盖上层node。比如{/admin/system}，最后的auto=false，target=aa，而由于admin有sysauth值，它会遗传给它的子节点，也即所有admin下的节点都需要认证。</p>
+<p>对每个节点，最重要的属性当然是target，这也是dispatch()流程最后要执行的方法。target主要有：<strong>alise</strong>、<strong>firstchild</strong>、<strong>call</strong>、<strong>cbi</strong>、<strong>form</strong>、<strong>template</strong>。这几个总体上可以分成两类，前两种主要用于链接其它node，后一个则是主要的操作、以及页面生成。下面分别描述。</p>
+<p><strong>链接方法</strong>：在介绍初始登录流程时，已经讲到了这种方法。比如初始登录时，url中的path_info仅为&rsquo;/&rsquo;，这应该会索引到rootnode节点。而该节点本身是没有内容显示的，所以它用alias(&lsquo;admin&rsquo;)方法，自动链接到admin节点。再比如，admin节点本身也没有内容显示，它用firstchild()方法，自动链接到它的第一个子节点/admin/status。</p>
+<p><strong>操作方法</strong>：这种方法一般用于一个路径的叶节点leaf，它们会去执行相应的操作，如修改interface参数等，并且动态生成页面html文件，传递给client。这里实际上是利用了所谓的<strong>MVC架构</strong>，这在后面再描述，这里主要描述luci怎么把生成的html发送给client端。</p>
+<p>Call、cbi、form、template这几种方法，执行的原理各不相同，但最终都会生成完整的http-response报文（包括html文件），并调用luci.template.render()，luci.http.redirect()等函数，把报文内容返回给luci.running()流程。</p>
+<div class="highlight"><div style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-1"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-1"> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-2"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-2"> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-3"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-3"> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-4"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-4"> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-5"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-5"> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-6"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-6"> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-7"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-7"> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-8"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-8"> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-9"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-9"> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-10"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-10">10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-11"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-11">11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-12"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-12">12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-13"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-13">13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-14"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-14">14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-15"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-15">15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-16"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-16">16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-17"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-17">17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-18"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-18">18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-19"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-19">19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-20"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-20">20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-21"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-21">21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-22"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-22">22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#64686c" id="hl-9-23"><a style="outline:none;text-decoration:none;color:inherit" href="#hl-9-23">23</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#c9d1d9;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// /usr/lib/lua/luci/controller/admin/index.lua
+</span></span><span style="display:flex;"><span>function index()
+</span></span><span style="display:flex;"><span>	local root = node()
+</span></span><span style="display:flex;"><span>	if not root.target then
+</span></span><span style="display:flex;"><span>		root.target = alias(&#34;admin&#34;)
+</span></span><span style="display:flex;"><span>		root.index = true
+</span></span><span style="display:flex;"><span>	end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	//创建了第一个admin的node
+</span></span><span style="display:flex;"><span>	local page   = node(&#34;admin&#34;)
+</span></span><span style="display:flex;"><span>	page.target  = firstchild()
+</span></span><span style="display:flex;"><span>	page.title   = _(&#34;Administration&#34;)
+</span></span><span style="display:flex;"><span>	page.order   = 10
+</span></span><span style="display:flex;"><span>	page.sysauth = &#34;root&#34;  //配置了认证方式并会传递给admin下面所有的子节点
+</span></span><span style="display:flex;"><span>	page.sysauth_authenticator = &#34;htmlauth&#34;
+</span></span><span style="display:flex;"><span>	page.ucidata = true
+</span></span><span style="display:flex;"><span>	page.index = true
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	-- Empty services menu to be populated by addons
+</span></span><span style="display:flex;"><span>	entry({&#34;admin&#34;, &#34;services&#34;}, firstchild(), _(&#34;Services&#34;), 80).index = true
+</span></span><span style="display:flex;"><span>	entry({&#34;admin&#34;, &#34;base&#34;}, firstchild(), _(&#34;System Settings&#34;), 90).index = true
+</span></span><span style="display:flex;"><span>	entry({&#34;admin&#34;, &#34;logout&#34;}, call(&#34;action_logout&#34;), _(&#34;Logout&#34;), 100)
+</span></span><span style="display:flex;"><span>end
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="322-用户认证">3.2.2 用户认证</h3>
+<p>前面已经知道，节点是由上而下逐层索引的，所以只要一个节点有sysauth值，那么它所有的子节点都需要认证。不难想象，/admin节点有sysauth值，它以下的所有子节点都是需要认证才能查看、操作。luci中关于登陆密码，用到的几个函数为：
+<img src="/image/openwrt_web/rcH5EuwKBWkkvRQz.png" alt="输入图片说明"></p>
+<p>可以看出它的密码是用的linux的密码，而openwrt的精简内核没有实现多用户机制，只有一个root用户，且开机时自动以root用户登录。要实现多用户，必须在web层面上，实现另外一套（user、passwd）系统。</p>
+<p>另外，认证后，serv端会发给client一个session值，且它要一直以cookie的形式存在于request报文中，供serv端来识别用户。这是web服务器的一般做法，这里就不多讲了。</p>
+<h3 id="323-mvc界面生成">3.2.3 MVC界面生成</h3>
+<p>上面我们介绍了/usr/lib/lua/luci/下有三个目录model、view、controller，它们对应M、V、C。第3.2.1节介绍了生成的界面怎么传递给client，下面简单介绍生成界面的方法。</p>
+<p>Call()方法会调用controller里的函数，主要通过openwrt系统的uci、network、inconfig等工具对系统进行设置，如果需要还会生成新界面。动态生成界面的方法有两种，一是通过cbi()/form()方法，它们利用model中定义的模板map，生成html文件；另一种是通过template()方法，利用view中定义的htm（一种类似html的文件），直接生成界面。</p>
+<p>关于如何新增web界面或实现新函数调用，参考svn日志提交或者参考<a href="https://blog.csdn.net/weixin_43883277/article/details/99865510">cbi方式生成新界面</a></p>
+<h1 id="4--luci调试">4  luci调试</h1>
+<h2 id="41-日志添加">4.1 日志添加</h2>
+<p>在luci中我们定义了log日志的数据规范，相关输入、输出接口实现存放在qca-networking-2019-spf-11-0_qca_oem.git\qsdk\qca\feeds\luci\modules\luci-base\luasrc\log.lua中，我们只需要在自己的lua文件中包含log文件，在具体需要输出日志的地方调用log文件的输出接口，如下demo
+<img src="/image/openwrt_web/4rFBuCkajJ8z9pVW.png" alt="输入图片说明"></p>
+<h2 id="42-html与lua文件定位">4.2 html与lua文件定位</h2>
+<p>在web界面，可以通过查看框架源代码的方式定位html文件名称，根据html定位到具体的lua实现。
+<img src="/image/openwrt_web/YOQaGgBFcnMUTCaE.png" alt="输入图片说明"></p>
+<h2 id="43-日志查看">4.3 日志查看</h2>
+<p>luci的log日志存放在<strong>tmp/luci.output</strong>中
+<img src="/image/openwrt_web/5MKJM01cKDsXXvdh.png" alt="输入图片说明"></p>
+<h1 id="5-wireshark抓包">5 wireshark抓包</h1>
+<p><img src="/image/openwrt_web/lM3J8dTiFd3b7lEM.png" alt="输入图片说明"></p>
+<p><strong>参考资料</strong></p>
+<p><a href="https://github.com/openwrt/luci/wiki">luci wiki</a></p>
+<p><a href="https://www.cnblogs.com/zmkeil/archive/2013/05/14/3078766.html">uhttp实现框架</a></p>
+<p><a href="https://www.cnblogs.com/zmkeil/archive/2013/05/14/3078774.html">luci实现框架</a></p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">dgwu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+      2022-06-11
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+
+    
+    
+
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://Breeze-Wu.github.io/tags/openwrt/">openwrt</a>
+            <a href="https://Breeze-Wu.github.io/tags/web/">web</a>
+            
+        </div>
+
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/%E5%88%9D%E6%8E%A2linux%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E6%A0%88/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
+            <span class="prev-text nav-default">初探linux网络协议栈</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/iptable%E5%86%85%E5%AE%B9%E6%A2%B3%E7%90%86/">
+            <span class="next-text nav-default">iptable内容梳理</span>
+            <span class="prev-text nav-mobile">Next</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+    
+
+  
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="icon-links">
+  
+  
+    <a href="mailto:your@email.com" rel="me noopener" class="iconfont"
+      title="email" >
+      <svg class="icon" viewBox="0 0 1451 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+    </a>
+  
+    <a href="http://localhost:1317" rel="me noopener" class="iconfont"
+      title="github"  target="_blank"
+      >
+      <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M512 12.672c-282.88 0-512 229.248-512 512 0 226.261333 146.688 418.133333 350.08 485.76 25.6 4.821333 34.986667-11.008 34.986667-24.618667 0-12.16-0.426667-44.373333-0.64-87.04-142.421333 30.890667-172.458667-68.693333-172.458667-68.693333C188.672 770.986667 155.008 755.2 155.008 755.2c-46.378667-31.744 3.584-31.104 3.584-31.104 51.413333 3.584 78.421333 52.736 78.421333 52.736 45.653333 78.293333 119.850667 55.68 149.12 42.581333 4.608-33.109333 17.792-55.68 32.426667-68.48-113.706667-12.8-233.216-56.832-233.216-253.013333 0-55.893333 19.84-101.546667 52.693333-137.386667-5.76-12.928-23.04-64.981333 4.48-135.509333 0 0 42.88-13.738667 140.8 52.48 40.96-11.392 84.48-17.024 128-17.28 43.52 0.256 87.04 5.888 128 17.28 97.28-66.218667 140.16-52.48 140.16-52.48 27.52 70.528 10.24 122.581333 5.12 135.509333 32.64 35.84 52.48 81.493333 52.48 137.386667 0 196.693333-119.68 240-233.6 252.586667 17.92 15.36 34.56 46.762667 34.56 94.72 0 68.522667-0.64 123.562667-0.64 140.202666 0 13.44 8.96 29.44 35.2 24.32C877.44 942.592 1024 750.592 1024 524.672c0-282.752-229.248-512-512-512"></path>
+</svg>
+
+    </a>
+  
+    <a href="http://localhost:1317" rel="me noopener" class="iconfont"
+      title="twitch"  target="_blank"
+      >
+      <svg
+  class="icon" style="" viewBox="0 0 36 36" version="1.1" width="36" height="36" id="svg8">
+  <path
+      style=""
+      d="M 10,32.5 C 10,30.309524 9.5666667,30 6.5,30 H 3 V 18.196167 6.3923336 L 6.2976072,3.1961668 9.5952145,0 H 21.297607 33 v 9.2813035 9.2813035 l -5.778997,5.718696 C 23.230948,28.229724 20.653654,30 18.895317,30 17.471816,30 15.312792,31.102597 14,32.5 12.708255,33.875 11.279813,35 10.825686,35 10.371559,35 10,33.875 10,32.5 Z M 23.12736,22 c 1.432033,0 3.645397,-1.197147 5.185549,-2.804719 C 30.682196,16.722278 31,15.598708 31,9.6952811 V 3 H 20.5 10 v 9.5 9.5 h 3 c 2.413503,0 3,0.425076 3,2.174314 v 2.174314 l 2.314451,-2.174314 C 19.587399,22.978441 21.753208,22 23.12736,22 Z M 17.666667,14.333333 C 17.3,13.966667 17,12.166667 17,10.333333 17,8.037037 17.466667,7 18.5,7 c 1.083333,0 1.5,1.1111111 1.5,4 0,3.753437 -0.7878,4.878866 -2.333333,3.333333 z m 6.722867,-0.760607 C 23.554137,11.395717 24.34722,7.7069709 25.75,7.2449946 26.613128,6.9607414 27,8.097114 27,10.916667 c 0,3.979702 -1.51214,5.518252 -2.610466,2.656059 z"
+      id="rect824"/>
+</svg>
+
+    </a>
+
+
+<a href="https://Breeze-Wu.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+    class="iconfont" title="rss" target="_blank">
+    <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="30" height="30">
+  <path d="M819.157333 1024C819.157333 574.592 449.408 204.8 0 204.8V0c561.706667 0 1024 462.293333 1024 1024h-204.842667zM140.416 743.04a140.8 140.8 0 0 1 140.501333 140.586667A140.928 140.928 0 0 1 140.074667 1024C62.72 1024 0 961.109333 0 883.626667s62.933333-140.544 140.416-140.586667zM678.784 1024h-199.04c0-263.210667-216.533333-479.786667-479.744-479.786667V345.173333c372.352 0 678.784 306.517333 678.784 678.826667z"></path>
+</svg>
+
+  </a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+      2017 -
+    2023
+    <span class="heart">
+      
+      <i class="iconfont">
+        <svg class="icon" viewBox="0 0 1025 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="14" height="14">
+  <path d="M1000.1 247.9c-15.5-37.3-37.6-70.6-65.7-98.9-54.4-54.8-125.8-85-201-85-85.7 0-166 39-221.4 107.4C456.6 103 376.3 64 290.6 64c-75.1 0-146.5 30.4-201.1 85.6-28.2 28.5-50.4 61.9-65.8 99.3-16 38.8-24 79.9-23.6 122.2 0.7 91.7 40.1 177.2 108.1 234.8 3.1 2.6 6 5.1 8.9 7.8 14.9 13.4 58 52.8 112.6 102.7 93.5 85.5 209.9 191.9 257.5 234.2 7 6.1 15.8 9.5 24.9 9.5 9.2 0 18.1-3.4 24.9-9.5 34.5-30.7 105.8-95.9 181.4-165 74.2-67.8 150.9-138 195.8-178.2 69.5-57.9 109.6-144.4 109.9-237.3 0.1-42.5-8-83.6-24-122.2z"
+   fill="#8a8a8a"></path>
+</svg>
+
+      </i>
+    </span><span class="author">
+        dgwu
+        
+      </span></span>
+
+  
+  
+
+  
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="/js/main.fe83e11b4fbc9193d67e2c9db78bad21f8dc59fca0cacd8c1c3bb071bb16a852.js" integrity="sha256-/oPhG0&#43;8kZPWfiydt4utIfjcWfygys2MHDuwcbsWqFI=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>web on dgwu - A super concise theme for Hugo</title>
+    <link>https://Breeze-Wu.github.io/tags/web/</link>
+    <description>Recent content in web on dgwu - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 11 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://Breeze-Wu.github.io/tags/web/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>openwrt系统的web管理流程梳理</title>
+      <link>https://Breeze-Wu.github.io/post/openwrt%E7%B3%BB%E7%BB%9F%E7%9A%84web%E7%AE%A1%E7%90%86%E6%B5%81%E7%A8%8B%E6%A2%B3%E7%90%86/</link>
+      <pubDate>Sat, 11 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/openwrt%E7%B3%BB%E7%BB%9F%E7%9A%84web%E7%AE%A1%E7%90%86%E6%B5%81%E7%A8%8B%E6%A2%B3%E7%90%86/</guid>
+      <description>摘要 本文旨在梳理总结openwrt系统的web管理的实现流程，解析大致的模块与函数调用路线，参考源码qca-networking-2019-</description>
+    </item>
+    
+  </channel>
+</rss>

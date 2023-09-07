@@ -6,11 +6,20 @@
     <description>Recent content in Tags on dgwu - A super concise theme for Hugo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 03 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://Breeze-Wu.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 08 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://Breeze-Wu.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>goahead</title>
+      <link>https://Breeze-Wu.github.io/tags/goahead/</link>
+      <pubDate>Sat, 08 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/tags/goahead/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>openwrt</title>
       <link>https://Breeze-Wu.github.io/tags/openwrt/</link>
-      <pubDate>Fri, 03 Feb 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 08 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://Breeze-Wu.github.io/tags/openwrt/</guid>
       <description></description>
@@ -22,6 +31,60 @@
       <pubDate>Fri, 13 Jan 2023 00:00:00 +0000</pubDate>
       
       <guid>https://Breeze-Wu.github.io/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>web</title>
+      <link>https://Breeze-Wu.github.io/tags/web/</link>
+      <pubDate>Sat, 11 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/tags/web/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>iptable</title>
+      <link>https://Breeze-Wu.github.io/tags/iptable/</link>
+      <pubDate>Sat, 14 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/tags/iptable/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pcie</title>
+      <link>https://Breeze-Wu.github.io/tags/pcie/</link>
+      <pubDate>Thu, 07 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/tags/pcie/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>qos</title>
+      <link>https://Breeze-Wu.github.io/tags/qos/</link>
+      <pubDate>Sat, 12 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/tags/qos/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>zte</title>
+      <link>https://Breeze-Wu.github.io/tags/zte/</link>
+      <pubDate>Sat, 12 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/tags/zte/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>TCP/IP</title>
+      <link>https://Breeze-Wu.github.io/tags/tcp/ip/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/tags/tcp/ip/</guid>
       <description></description>
     </item>
     

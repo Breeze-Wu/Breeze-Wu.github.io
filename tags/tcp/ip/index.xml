@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>TCP/IP on dgwu - A super concise theme for Hugo</title>
+    <link>https://Breeze-Wu.github.io/tags/tcp/ip/</link>
+    <description>Recent content in TCP/IP on dgwu - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language><atom:link href="https://Breeze-Wu.github.io/tags/tcp/ip/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>初探linux网络协议栈</title>
+      <link>https://Breeze-Wu.github.io/post/%E5%88%9D%E6%8E%A2linux%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E6%A0%88/</link>
+      <pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/%E5%88%9D%E6%8E%A2linux%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E6%A0%88/</guid>
+      <description>摘要 linux网络是 网络常识概述 OSI模型 OSI模型（Open Systems Interconnection model）是一种用于计算机网络体系结构的理论模型，由国际标准化组织（IS</description>
+    </item>
+    
+  </channel>
+</rss>

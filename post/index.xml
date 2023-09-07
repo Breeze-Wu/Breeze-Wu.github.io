@@ -6,7 +6,16 @@
     <description>Recent content in Posts on dgwu - A super concise theme for Hugo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 03 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://Breeze-Wu.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 08 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://Breeze-Wu.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>goahead架构分析</title>
+      <link>https://Breeze-Wu.github.io/post/goahead%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90/</link>
+      <pubDate>Sat, 08 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/goahead%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90/</guid>
+      <description>摘要 本文旨在梳理总结goahead源码(4.1.3)实现原理，解析大致的函数栈调用路线，学习其架构设计思路。文中错误处欢迎指正交流。 1、go</description>
+    </item>
+    
     <item>
       <title>openwrt上debug方法总结</title>
       <link>https://Breeze-Wu.github.io/post/openwrt%E4%B8%8A%E4%BB%A3%E7%A0%81debug/</link>
@@ -23,6 +32,60 @@
       
       <guid>https://Breeze-Wu.github.io/post/linux_init/</guid>
       <description>摘要 本文旨在梳理总结linux系统是如何加载第一个进程、init进程的实现以及如何制作根文件系统。文章从linux内核源码入手，逐步梳理从设</description>
+    </item>
+    
+    <item>
+      <title>linux系统信号实现</title>
+      <link>https://Breeze-Wu.github.io/post/linux%E7%B3%BB%E7%BB%9F%E4%BF%A1%E5%8F%B7%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Sun, 02 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/linux%E7%B3%BB%E7%BB%9F%E4%BF%A1%E5%8F%B7%E5%AE%9E%E7%8E%B0/</guid>
+      <description>摘要 上一篇我们讨论了系统调试三种应对不同阶段的方法，最后以一个断错误的例子，带领读者动手使用三种工具，这编文章我们聊断错误的原理是什么，li</description>
+    </item>
+    
+    <item>
+      <title>初探linux网络协议栈</title>
+      <link>https://Breeze-Wu.github.io/post/%E5%88%9D%E6%8E%A2linux%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E6%A0%88/</link>
+      <pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/%E5%88%9D%E6%8E%A2linux%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E6%A0%88/</guid>
+      <description>摘要 linux网络是 网络常识概述 OSI模型 OSI模型（Open Systems Interconnection model）是一种用于计算机网络体系结构的理论模型，由国际标准化组织（IS</description>
+    </item>
+    
+    <item>
+      <title>openwrt系统的web管理流程梳理</title>
+      <link>https://Breeze-Wu.github.io/post/openwrt%E7%B3%BB%E7%BB%9F%E7%9A%84web%E7%AE%A1%E7%90%86%E6%B5%81%E7%A8%8B%E6%A2%B3%E7%90%86/</link>
+      <pubDate>Sat, 11 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/openwrt%E7%B3%BB%E7%BB%9F%E7%9A%84web%E7%AE%A1%E7%90%86%E6%B5%81%E7%A8%8B%E6%A2%B3%E7%90%86/</guid>
+      <description>摘要 本文旨在梳理总结openwrt系统的web管理的实现流程，解析大致的模块与函数调用路线，参考源码qca-networking-2019-</description>
+    </item>
+    
+    <item>
+      <title>iptable内容梳理</title>
+      <link>https://Breeze-Wu.github.io/post/iptable%E5%86%85%E5%AE%B9%E6%A2%B3%E7%90%86/</link>
+      <pubDate>Sat, 14 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/iptable%E5%86%85%E5%AE%B9%E6%A2%B3%E7%90%86/</guid>
+      <description>摘要 本文通过回答什么是iptables？iptables与netfilter的关系？如何使用iptables？这三个问题，梳理作者对iptb</description>
+    </item>
+    
+    <item>
+      <title>807x上模组适配梳理</title>
+      <link>https://Breeze-Wu.github.io/post/807x%E4%B8%8A%E6%A8%A1%E7%BB%84%E9%80%82%E9%85%8D%E6%A2%B3%E7%90%86/</link>
+      <pubDate>Thu, 07 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/807x%E4%B8%8A%E6%A8%A1%E7%BB%84%E9%80%82%E9%85%8D%E6%A2%B3%E7%90%86/</guid>
+      <description>摘要 本文旨在梳理总结807x上模组的适配工作，简单介绍807x与模组的通行交互方式，PCIe总线驱动在linux中的实现原理，模组如何注册到</description>
+    </item>
+    
+    <item>
+      <title>qos实现</title>
+      <link>https://Breeze-Wu.github.io/post/qos%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Sat, 12 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/qos%E5%AE%9E%E7%8E%B0/</guid>
+      <description>摘要 本文旨在梳理总结ZTE网关Qos流控实现的原理，解析大致的函数栈调用路线，参考源码CTCC_ZXIC_202107。文中错误处欢迎指正交</description>
     </item>
     
   </channel>

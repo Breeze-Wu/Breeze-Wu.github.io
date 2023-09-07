@@ -16,5 +16,32 @@
       <description>摘要 本文旨在梳理总结linux系统是如何加载第一个进程、init进程的实现以及如何制作根文件系统。文章从linux内核源码入手，逐步梳理从设</description>
     </item>
     
+    <item>
+      <title>linux系统信号实现</title>
+      <link>https://Breeze-Wu.github.io/post/linux%E7%B3%BB%E7%BB%9F%E4%BF%A1%E5%8F%B7%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Sun, 02 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/linux%E7%B3%BB%E7%BB%9F%E4%BF%A1%E5%8F%B7%E5%AE%9E%E7%8E%B0/</guid>
+      <description>摘要 上一篇我们讨论了系统调试三种应对不同阶段的方法，最后以一个断错误的例子，带领读者动手使用三种工具，这编文章我们聊断错误的原理是什么，li</description>
+    </item>
+    
+    <item>
+      <title>初探linux网络协议栈</title>
+      <link>https://Breeze-Wu.github.io/post/%E5%88%9D%E6%8E%A2linux%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E6%A0%88/</link>
+      <pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/%E5%88%9D%E6%8E%A2linux%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E6%A0%88/</guid>
+      <description>摘要 linux网络是 网络常识概述 OSI模型 OSI模型（Open Systems Interconnection model）是一种用于计算机网络体系结构的理论模型，由国际标准化组织（IS</description>
+    </item>
+    
+    <item>
+      <title>qos实现</title>
+      <link>https://Breeze-Wu.github.io/post/qos%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Sat, 12 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://Breeze-Wu.github.io/post/qos%E5%AE%9E%E7%8E%B0/</guid>
+      <description>摘要 本文旨在梳理总结ZTE网关Qos流控实现的原理，解析大致的函数栈调用路线，参考源码CTCC_ZXIC_202107。文中错误处欢迎指正交</description>
+    </item>
+    
   </channel>
 </rss>
